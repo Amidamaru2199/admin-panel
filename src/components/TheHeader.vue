@@ -16,9 +16,19 @@
       <RouterLink to="/">Рефералька</RouterLink>
     </nav>
 
-    <button class="header__account-button">
-      <TheAccount />
-    </button>
+    <DropdownMenuRoot>
+      <DropdownMenuTrigger class="header__account-button">
+        <TheAccount />
+      </DropdownMenuTrigger>
+
+      <DropdownMenuPortal>
+        <DropdownMenuContent class="header__dropdown-content" align="end">
+          <div class="header__dropdown-item">Аккаунт</div>
+          <hr />
+          <div class="header__dropdown-item">Выход</div>
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenuRoot>
   </div>
 </template>
 
@@ -27,7 +37,7 @@ import TheAccount from './icons/TheAccount.vue'
 import TheLogo from './icons/TheLogo.vue'
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .header {
   display: flex;
   align-items: center;
@@ -74,6 +84,34 @@ import TheLogo from './icons/TheLogo.vue'
     svg {
       width: 20px;
       height: 20px;
+    }
+  }
+
+  &__dropdown-content {
+    min-width: 120px;
+    padding: 4px;
+    background-color: hsl(240 10% 3.9%);
+    border: 1px solid hsl(240 3.7% 25%);
+    border-radius: 8px;
+    z-index: 50;
+
+    hr {
+      height: 1px;
+      margin: 4px -4px;
+      border: none;
+      background-color: hsl(240 3.7% 15.9%);
+    }
+  }
+
+  &__dropdown-item {
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: hsl(0 0% 98%);
+
+    &:hover {
+      background-color: hsl(240deg 3.7% 25%);
     }
   }
 }
