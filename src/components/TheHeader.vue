@@ -70,6 +70,11 @@ import TheLogo from './icons/TheLogo.vue'
     &:hover {
       background-color: hsl(240deg 3.7% 15.9% / 80%);
     }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 </style>
