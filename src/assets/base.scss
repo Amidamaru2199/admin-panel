@@ -1,0 +1,30 @@
+body {
+  min-height: 100vh;
+  font-family:
+    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  text-decoration: none;
+  background-color: hsl(240 10% 3.9%);
+}
+
+.container {
+  padding-inline: 24px;
+}
+
+a {
+  text-decoration: inherit;
+  color: hsl(240 5% 64.9%);
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    color: hsl(0 0% 98%);
+  }
+}
+
+.router-link-active {
+  color: hsl(0 0% 98%);
+}
+
+button {
+  cursor: pointer;
+}
