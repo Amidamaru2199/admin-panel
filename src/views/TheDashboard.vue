@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard container">
+  <div class="dashboard">
     <div class="dashboard__top-containars">
       <div class="dashboard__top-containar">
         <span class="dashboard__top-containar-title">Всего юзеров</span>
@@ -115,7 +115,7 @@ import TheArrow from '@/components/icons/TheArrow.vue'
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 32px;
-    padding-block: 32px;
+    padding-bottom: 32px;
   }
   &__top-containar {
     display: flex;

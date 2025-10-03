@@ -6,14 +6,11 @@
         <span>AdronVPN</span>
       </RouterLink>
       <RouterLink to="/dashboard">Дашборд</RouterLink>
-      <RouterLink to="/">Сервера</RouterLink>
+      <RouterLink to="/servers">Сервера</RouterLink>
       <RouterLink to="/">Тарифы</RouterLink>
       <RouterLink to="/">Пользователи</RouterLink>
-      <RouterLink to="/">Платежи</RouterLink>
       <RouterLink to="/">UTM коды</RouterLink>
       <RouterLink to="/">Рассылки</RouterLink>
-      <RouterLink to="/">Выплаты</RouterLink>
-      <RouterLink to="/">Рефералька</RouterLink>
     </nav>
 
     <DropdownMenuRoot>
@@ -42,7 +39,7 @@ import TheLogo from './icons/TheLogo.vue'
   display: flex;
   align-items: center;
   min-height: 64px;
-  padding-inline: 24px;
+  padding-inline: 32px;
   border-bottom: 1px solid hsl(240 3.7% 15.9%);
 
   &__navigation {

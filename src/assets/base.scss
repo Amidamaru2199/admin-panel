@@ -8,11 +8,21 @@ body {
 }
 
 * {
+  border-width: 0;
   border-color: hsl(240 3.7% 15.9%);
+  border-style: solid;
 }
 
-.container {
-  padding-inline: 24px;
+button {
+  transition: .2s;
+
+  &:hover {
+    background-color: hsl(240deg 3.7% 15.9% / 80%);
+  }
+}
+
+main {
+  padding: 32px;
 }
 
 a {

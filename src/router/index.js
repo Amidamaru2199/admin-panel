@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TheDashboard from '../views/TheDashboard.vue'
+import TheServers from '@/views/TheServers.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,6 +9,11 @@ const router = createRouter({
       path: '/dashboard',
       name: 'dashboard',
       component: TheDashboard,
+    },
+    {
+      path: '/servers',
+      name: 'servers',
+      component: TheServers,
     },
     // {
     //   path: '/about',

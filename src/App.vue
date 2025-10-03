@@ -2,7 +2,9 @@
   <div>
     <TheHeader />
   </div>
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <script setup>
