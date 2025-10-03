@@ -42,3 +42,148 @@ a {
 button {
   cursor: pointer;
 }
+
+//
+
+.block {
+  padding: 24px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 8px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+
+  &__header-text {
+    margin-right: auto;
+  }
+
+  &__title {
+    margin: 0 0 12px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
+    color: hsl(0 0% 98%);
+  }
+
+  &__subtitle {
+    font-size: 14px;
+    color: hsl(240 5% 64.9%);
+  }
+
+  &__header-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    padding: 4px 8px;
+    margin-inline: 8px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    background-color: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: hsl(0 0% 98%);
+
+    &_add {
+      margin-right: 0;
+      color: hsl(240 5.9% 10%);
+      background-color: hsl(0 0% 98%);
+
+      svg {
+        color: hsl(240 5.9% 10%);
+      }
+    }
+  }
+
+  &__switcher-wr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 8px 0 0;
+
+    svg {
+      color: hsl(0 0% 98%);
+    }
+  }
+
+  &__table-wr {
+    margin-top: 24px;
+    border: 1px solid hsl(240 3.7% 15.9%);
+    border-radius: 6px;
+
+    table {
+      width: 100%;
+      text-indent: 0;
+      border-color: inherit;
+      border-collapse: collapse;
+
+      tr {
+        border-bottom: 1px solid hsl(240 3.7% 15.9%);
+
+        &:hover {
+          background-color: hsl(240deg 3.7% 15.9% / 50%);
+        }
+      }
+
+      th {
+        height: 48px;
+        padding: 1px 16px;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 500;
+        color: hsl(240 5% 64.9%);
+      }
+
+      tbody {
+        tr {
+          &:last-of-type {
+            border: none;
+          }
+        }
+      }
+
+      td {
+        padding: 15px 16px;
+        text-align: left;
+        font-size: 14px;
+        color: hsl(0 0% 98%);
+
+        div {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          span {
+            font-size: 12px;
+            color: hsl(240 5% 64.9%);
+          }
+        }
+
+        button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 6px;
+          background-color: transparent;
+          color: hsl(0 0% 98%);
+
+          &:hover {
+            background-color: hsl(240 3.7% 15.9%);
+          }
+        }
+
+        img {
+          width: 20px;
+          height: 15px;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+}

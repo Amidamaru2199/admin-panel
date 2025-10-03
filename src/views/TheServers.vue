@@ -1,28 +1,28 @@
 <template>
-  <div class="servers">
-    <div class="servers__header">
-      <div class="servers__header-text">
-        <h1 class="servers__title">Сервера</h1>
-        <span class="servers__subtitle">Управление VPN серверами </span>
+  <div class="servers block">
+    <div class="block__header">
+      <div class="block__header-text">
+        <h1 class="block__title">Сервера</h1>
+        <span class="block__subtitle">Управление VPN серверами</span>
       </div>
-      <div class="servers__switcher-wr">
+      <div class="block__switcher-wr">
         <TheSwitcher v-model="switchState" />
         <TheOko v-if="switchState" />
         <TheOkoLine v-else />
       </div>
 
-      <button class="servers__header-button">Получить куки для серверов</button>
+      <button class="block__header-button">Получить куки для серверов</button>
 
       <AddServerDialog>
         <template #trigger>
-          <div class="servers__header-button servers__header-button_add servers__dialog-trigger">
+          <div class="block__header-button block__header-button_add block__dialog-trigger">
             <TheCross />Добавить сервер
           </div>
         </template>
       </AddServerDialog>
     </div>
 
-    <div class="servers__table-wr">
+    <div class="block__table-wr">
       <table>
         <thead>
           <tr>
@@ -93,129 +93,8 @@ const switchState = ref(false)
 
 <style lang="scss">
 .servers {
-  padding: 24px;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 8px;
-
-  &__header {
-    display: flex;
-    align-items: center;
-  }
-
-  &__title {
-    margin: 0 0 12px;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 1;
-    color: hsl(0 0% 98%);
-  }
-
-  &__subtitle {
-    font-size: 14px;
-    color: hsl(240 5% 64.9%);
-  }
-
-  &__switcher-wr {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 8px 0 auto;
-
-    svg {
-      color: hsl(0 0% 98%);
-    }
-  }
-
   &__dialog-trigger {
     cursor: pointer;
-  }
-
-  &__header-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 8px;
-    margin-inline: 8px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 4px;
-    background-color: transparent;
-    font-size: 14px;
-    font-weight: 500;
-    color: hsl(0 0% 98%);
-
-    &_add {
-      margin-right: 0;
-      color: hsl(240 5.9% 10%);
-      background-color: hsl(0 0% 98%);
-
-      svg {
-        color: hsl(240 5.9% 10%);
-      }
-    }
-  }
-
-  &__table-wr {
-    margin-top: 24px;
-    border: 1px solid hsl(240 3.7% 15.9%);
-    border-radius: 6px;
-
-    table {
-      width: 100%;
-      text-indent: 0;
-      border-color: inherit;
-      border-collapse: collapse;
-
-      tr {
-        border-bottom: 1px solid hsl(240 3.7% 15.9%);
-
-        &:hover {
-          background-color: hsl(240deg 3.7% 15.9% / 50%);
-        }
-      }
-
-      th {
-        height: 48px;
-        padding: 1px 16px;
-        text-align: left;
-        font-size: 14px;
-        font-weight: 500;
-        color: hsl(240 5% 64.9%);
-      }
-
-      tbody {
-        tr {
-          &:last-of-type {
-            border: none;
-          }
-        }
-      }
-
-      td {
-        padding: 15px 16px;
-        text-align: left;
-        font-size: 14px;
-        color: hsl(0 0% 98%);
-
-        div {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-
-          span {
-            font-size: 12px;
-            color: hsl(240 5% 64.9%);
-          }
-        }
-
-        img {
-          width: 20px;
-          height: 15px;
-          object-fit: cover;
-        }
-      }
-    }
   }
 }
 </style>

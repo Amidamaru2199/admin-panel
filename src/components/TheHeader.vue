@@ -7,8 +7,8 @@
       </RouterLink>
       <RouterLink to="/dashboard">Дашборд</RouterLink>
       <RouterLink to="/servers">Сервера</RouterLink>
-      <RouterLink to="/">Тарифы</RouterLink>
-      <RouterLink to="/">Пользователи</RouterLink>
+      <RouterLink to="/tariffs">Тарифы</RouterLink>
+      <RouterLink to="/users">Пользователи</RouterLink>
       <RouterLink to="/">UTM коды</RouterLink>
       <RouterLink to="/">Рассылки</RouterLink>
     </nav>
