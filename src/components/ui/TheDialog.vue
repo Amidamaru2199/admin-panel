@@ -1,6 +1,6 @@
 <template>
     <DialogRoot v-model:open="isOpen">
-        <DialogTrigger class="dialog-trigger" as-child>
+        <DialogTrigger as-child>
             <slot name="trigger" />
         </DialogTrigger>
         <DialogPortal>
@@ -43,10 +43,6 @@ defineExpose({
 </script>
 
 <style lang="scss">
-.dialog-trigger {
-    cursor: pointer;
-}
-
 .dialog-overlay {
     position: fixed;
     inset: 0;

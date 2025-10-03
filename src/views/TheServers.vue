@@ -15,7 +15,7 @@
 
       <AddServerDialog>
         <template #trigger>
-          <div class="servers__header-button servers__header-button_add">
+          <div class="servers__header-button servers__header-button_add servers__dialog-trigger">
             <TheCross />Добавить сервер
           </div>
         </template>
@@ -65,7 +65,7 @@
               <div>
                 <AddServerDialog>
                   <template #trigger>
-                    <TheFile />
+                    <TheFile class="servers__dialog-trigger" />
                   </template>
                 </AddServerDialog>
                 <TheLink />
@@ -125,6 +125,10 @@ const switchState = ref(false)
     svg {
       color: hsl(0 0% 98%);
     }
+  }
+
+  &__dialog-trigger {
+    cursor: pointer;
   }
 
   &__header-button {
