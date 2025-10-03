@@ -15,7 +15,7 @@
                 </div>
 
                 <DatePickerTrigger class="date-picker-trigger">
-                    <Icon icon="radix-icons:calendar" />
+                    <ThePicker />
                 </DatePickerTrigger>
             </DatePickerField>
 
@@ -23,13 +23,12 @@
                 <DatePickerArrow class="date-picker-arrow" />
                 <DatePickerCalendar v-slot="{ weekDays, grid }" class="date-picker-calendar">
                     <DatePickerHeader class="date-picker-header">
-                        <DatePickerPrev class="date-picker-nav-button">
-                            <Icon icon="radix-icons:chevron-left" />
+                        <DatePickerPrev class="date-picker-nav-button date-picker-nav-button_prev">
+                            <ThePaginatorArrow />
                         </DatePickerPrev>
-
                         <DatePickerHeading class="date-picker-heading" />
                         <DatePickerNext class="date-picker-nav-button">
-                            <Icon icon="radix-icons:chevron-right" />
+                            <ThePaginatorArrow />
                         </DatePickerNext>
                     </DatePickerHeader>
 
@@ -62,6 +61,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import ThePicker from '@/components/icons/ThePicker.vue'
 
 const props = defineProps({
     id: {
@@ -170,6 +170,7 @@ const props = defineProps({
     svg {
         width: 16px;
         height: 16px;
+        color: hsl(240, 5%, 64.9%);
     }
 }
 
@@ -222,6 +223,10 @@ const props = defineProps({
         width: 16px;
         height: 16px;
     }
+}
+
+.date-picker-nav-button_prev {
+    transform: rotate(180deg);
 }
 
 .date-picker-heading {

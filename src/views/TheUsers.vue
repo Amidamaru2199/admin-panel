@@ -69,19 +69,9 @@
         </tbody>
       </table>
     </div>
+    <ThePagination :total-items="37659" :items-per-page="20" :current-page="currentPage"
+      @update:current-page="handlePageChange" />
   </div>
-  <PaginationRoot>
-    <PaginationList v-slot="{ items }">
-      <PaginationFirst />
-      <PaginationPrev />
-      <template v-for="(page, index) in items">
-        <PaginationListItem v-if="page.type === 'page'" :key="index" />
-        <PaginationEllipsis v-else :key="page.type" :index="index"> &#8230; </PaginationEllipsis>
-      </template>
-      <PaginationNext />
-      <PaginationLast />
-    </PaginationList>
-  </PaginationRoot>
 </template>
 
 <script setup>
@@ -89,8 +79,15 @@ import { ref } from 'vue'
 import AddTimeDialog from '@/components/AddTimeDialog.vue'
 import FilterDialog from '@/components/FilterDialog.vue'
 import GroupTimeDialog from '@/components/GroupTimeDialog.vue'
+import ThePagination from '@/components/ui/ThePagination.vue'
 
-const switchState = ref(false)
+const currentPage = ref(1)
+
+const handlePageChange = (page) => {
+  currentPage.value = page
+  // Здесь можно добавить логику загрузки данных для новой страницы
+  console.log('Переход на страницу:', page)
+}
 </script>
 
 <style lang="scss">
