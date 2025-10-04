@@ -1,111 +1,295 @@
 <template>
-  <TheDialog>
+  <TheDialog ref="dialogRef">
     <template #trigger>
       <slot name="trigger" />
     </template>
 
-    <template #title> Добавление сервера </template>
+    <template #title>{{ dialogTitle }}</template>
 
-    <template #description> Укажите данные сервера </template>
+    <template #description>{{ dialogDescription }}</template>
 
     <template #body>
-      <div class="servers__dialog-grid">
-        <div class="servers__dialog-group">
-          <div class="servers__dialog-grid-item">
-            <label for="">Название</label>
-            <input placeholder="Название" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item">
-            <label for="">Страна</label>
-            <input placeholder="Страна" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item">
-            <label for="">Код</label>
-            <input placeholder="Код" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item">
-            <label for="">IP адрес</label>
-            <input placeholder="IP адрес" type="text" />
-          </div>
+      <form id="server-form" @submit.prevent="handleSave" class="servers__dialog-form">
+        <div class="servers__dialog-grid">
+          <div class="servers__dialog-group">
+            <div class="servers__dialog-grid-item">
+              <label for="">Название</label>
+              <input v-model="formData.name" placeholder="Название" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item">
+              <label for="">Страна</label>
+              <input v-model="formData.country" placeholder="Страна" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item">
+              <label for="">Код</label>
+              <input v-model="formData.code" placeholder="Код" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item">
+              <label for="">IP адрес</label>
+              <input v-model="formData.ip" placeholder="IP адрес" type="text" />
+            </div>
 
-          <NumberFieldRoot class="servers__dialog-grid-item">
-            <NumberFieldDecrement class="servers__dialog-decrement">
-              <TheMinus />
-            </NumberFieldDecrement>
-            <label for="">VLESS Inbound ID</label>
-            <NumberFieldInput />
-            <NumberFieldIncrement class="servers__dialog-increment">
-              <ThePlus />
-            </NumberFieldIncrement>
-          </NumberFieldRoot>
+            <NumberFieldRoot class="servers__dialog-grid-item">
+              <NumberFieldDecrement class="servers__dialog-decrement" @click="vlessInboundId--">
+                <TheMinus />
+              </NumberFieldDecrement>
+              <label for="">VLESS Inbound ID</label>
+              <NumberFieldInput v-model="vlessInboundId" />
+              <NumberFieldIncrement class="servers__dialog-increment" @click="vlessInboundId++">
+                <ThePlus />
+              </NumberFieldIncrement>
+            </NumberFieldRoot>
 
-          <div class="servers__dialog-grid-item">
-            <label for="">Публичный ключ</label>
-            <input placeholder="Публичный ключ" type="text" />
+            <div class="servers__dialog-grid-item">
+              <label for="">Публичный ключ</label>
+              <input v-model="formData.public_key" placeholder="Публичный ключ" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item servers__dialog-grid-item_switcher">
+              <TheSwitcher v-model="isActive" />
+              <span>Активный</span>
+            </div>
           </div>
-          <div class="servers__dialog-grid-item servers__dialog-grid-item_switcher">
-            <TheSwitcher v-model="switchState" />
-            <span>Активный</span>
+          <div class="servers__dialog-group">
+            <div class="servers__dialog-grid-item">
+              <label for="">Порт панели</label>
+              <input v-model="formData.port_panel" placeholder="Порт панели" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item">
+              <label for="">URL путь к панели</label>
+              <input v-model="formData.uri_path" placeholder="URL путь к панели" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item">
+              <label for="">Пароль к панели</label>
+              <input v-model="formData.password" placeholder="Пароль к панели" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item">
+              <label for="">Порт inbound</label>
+              <input v-model="formData.port_key" placeholder="Порт inbound" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item">
+              <label for="">Короткий ID</label>
+              <input v-model="formData.short_id" placeholder="Короткий ID" type="text" />
+            </div>
+            <div class="servers__dialog-grid-item">
+              <label for="">Вес</label>
+              <input v-model.number="formData.weight" placeholder="Вес" type="number" step="0.1" />
+            </div>
+            <div class="servers__dialog-grid-item servers__dialog-grid-item_switcher">
+              <TheSwitcher v-model="isExcluded" />
+              <span>Искл. из распределения</span>
+            </div>
           </div>
         </div>
-        <div class="servers__dialog-group">
-          <div class="servers__dialog-grid-item">
-            <label for="">Порт панели</label>
-            <input placeholder="Порт панели" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item">
-            <label for="">URL путь к панели</label>
-            <input placeholder="URL путь к панели" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item">
-            <label for="">Пароль к панели</label>
-            <input placeholder="Пароль к панели" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item">
-            <label for="">Порт inbound</label>
-            <input placeholder="Порт inbound" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item">
-            <label for="">Короткий ID</label>
-            <input placeholder="Короткий ID" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item">
-            <label for="">Вес</label>
-            <input placeholder="Вес" type="text" />
-          </div>
-          <div class="servers__dialog-grid-item servers__dialog-grid-item_switcher">
-            <TheSwitcher v-model="switchState" />
-            <span>Искл. из распределения</span>
-          </div>
+        <div class="servers__dialog-grid-item">
+          <label for="">Описание</label>
+          <input v-model="formData.description" placeholder="Описание" type="text" />
         </div>
-      </div>
-      <div class="servers__dialog-grid-item">
-        <label for="">Описание</label>
-        <input placeholder="Описание" type="text" />
-      </div>
-      <div class="servers__dialog-grid-item">
-        <label for="">Инфо (не видно пользователям)</label>
-        <input placeholder="Инфо" type="text" />
-      </div>
+        <div class="servers__dialog-grid-item">
+          <label for="">Инфо (не видно пользователям)</label>
+          <input v-model="formData.info" placeholder="Инфо" type="text" />
+        </div>
+      </form>
     </template>
 
     <template #footer>
-      <button class="servers__dialog-save-button">Сохранить</button>
+      <button type="submit" form="server-form" class="servers__dialog-save-button"
+        :disabled="usersStore.isLoading || !isFormValid">
+        {{ buttonText }}
+      </button>
     </template>
   </TheDialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TheDialog from '@/components/ui/TheDialog.vue'
 import TheSwitcher from '@/components/ui/TheSwitcher.vue'
 import TheMinus from '@/components/icons/TheMinus.vue'
 import ThePlus from '@/components/icons/ThePlus.vue'
+import { useUsersStore } from '@/stores/index'
 
-const switchState = ref(false)
+const props = defineProps({
+  mode: {
+    type: String,
+    default: 'create', // 'create' или 'edit'
+    validator: (value) => ['create', 'edit'].includes(value)
+  },
+  serverData: {
+    type: Object,
+    default: null // Данные сервера для редактирования
+  }
+})
+
+const usersStore = useUsersStore()
+const dialogRef = ref(null)
+
+// Реактивные данные формы
+const formData = ref({
+  name: '',
+  country: '',
+  code: '',
+  ip: '',
+  vless_inbound_id: 1,
+  public_key: '',
+  is_active: true,
+  port_panel: '',
+  uri_path: '',
+  password: '',
+  port_key: '',
+  short_id: '',
+  weight: 10.0,
+  is_excluded: false,
+  description: '',
+  info: ''
+})
+
+const isActive = ref(true)
+const isExcluded = ref(false)
+const vlessInboundId = ref(1)
+
+// Computed свойства для заголовков
+const dialogTitle = computed(() => {
+  return props.mode === 'edit' ? 'Редактирование сервера' : 'Добавление сервера'
+})
+
+const dialogDescription = computed(() => {
+  return props.mode === 'edit' ? 'Измените данные сервера' : 'Укажите данные сервера'
+})
+
+const buttonText = computed(() => {
+  if (usersStore.isLoading) {
+    return props.mode === 'edit' ? 'Сохранение...' : 'Создание...'
+  }
+  return props.mode === 'edit' ? 'Сохранить изменения' : 'Сохранить'
+})
+
+// Computed свойство для проверки валидности формы
+const isFormValid = computed(() => {
+  const requiredFields = [
+    'name',
+    'country',
+    'code',
+    'ip',
+    'port_panel',
+    'uri_path',
+    'password',
+    'port_key'
+  ]
+
+  // Проверяем, что все обязательные поля заполнены
+  const allRequiredFieldsFilled = requiredFields.every(field =>
+    formData.value[field] && formData.value[field].toString().trim() !== ''
+  )
+
+  // Проверяем, что VLESS Inbound ID больше 0
+  const validVlessId = vlessInboundId.value > 0
+
+  // Проверяем, что вес больше 0
+  const validWeight = formData.value.weight > 0
+
+  return allRequiredFieldsFilled && validVlessId && validWeight
+})
+
+// Функция для заполнения формы данными сервера
+const populateForm = (server) => {
+  if (!server) return
+
+  formData.value = {
+    name: server.name || '',
+    country: server.country || '',
+    code: server.code || '',
+    ip: server.ip || '',
+    vless_inbound_id: server.vless_inbound_id || 1,
+    public_key: server.public_key || '',
+    is_active: server.is_active ?? true,
+    port_panel: server.port_panel || '',
+    uri_path: server.uri_path || '',
+    password: server.password || '',
+    port_key: server.port_key || '',
+    short_id: server.short_id || '',
+    weight: server.weight || 10.0,
+    is_excluded: server.is_excluded ?? false,
+    description: server.description || '',
+    info: server.info || ''
+  }
+
+  isActive.value = server.is_active ?? true
+  isExcluded.value = server.is_excluded ?? false
+  vlessInboundId.value = server.vless_inbound_id || 1
+}
+
+// Watcher для заполнения формы при изменении serverData
+watch(() => props.serverData, (newServerData) => {
+  if (newServerData && props.mode === 'edit') {
+    populateForm(newServerData)
+  }
+}, { immediate: true })
+
+const handleSave = async () => {
+  try {
+    // Подготавливаем данные для отправки
+    const serverData = {
+      ...formData.value,
+      is_active: isActive.value,
+      is_excluded: isExcluded.value,
+      vless_inbound_id: vlessInboundId.value,
+      user_count: props.mode === 'edit' ? props.serverData?.user_count || 0 : 0,
+      cookie: props.mode === 'edit' ? props.serverData?.cookie || 'session=' : 'session='
+    }
+
+    // Вызываем соответствующий метод в зависимости от режима
+    if (props.mode === 'edit') {
+      await usersStore.editServer(props.serverData.id, serverData)
+    } else {
+      await usersStore.addServer(serverData)
+    }
+
+    // Закрываем диалог после успешного сохранения
+    if (dialogRef.value) {
+      dialogRef.value.isOpen = false
+    }
+
+    // Сбрасываем форму только при создании
+    if (props.mode === 'create') {
+      resetForm()
+    }
+  } catch (error) {
+    console.error('Error saving server:', error)
+  }
+}
+
+const resetForm = () => {
+  formData.value = {
+    name: '',
+    country: '',
+    code: '',
+    ip: '',
+    vless_inbound_id: 1,
+    public_key: '',
+    is_active: true,
+    port_panel: '',
+    uri_path: '',
+    password: '',
+    port_key: '',
+    short_id: '',
+    weight: 10.0,
+    is_excluded: false,
+    description: '',
+    info: ''
+  }
+  isActive.value = true
+  isExcluded.value = false
+  vlessInboundId.value = 1
+}
 </script>
 
 <style lang="scss">
+.servers__dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .servers__dialog-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -149,6 +333,7 @@ const switchState = ref(false)
   }
 
   &:hover {
+
     .servers__dialog-increment,
     .servers__dialog-decrement {
       display: flex;
@@ -166,6 +351,11 @@ const switchState = ref(false)
 
   span {
     margin: 0;
+  }
+
+  .required {
+    color: hsl(0 62.8% 30.6%);
+    font-weight: 600;
   }
 
   input {
@@ -192,8 +382,17 @@ const switchState = ref(false)
   border-radius: 6px;
   color: hsl(240 5.9% 10%);
   background-color: hsl(0 0% 98%);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
+    background-color: hsl(240 5% 64.9%);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
     background-color: hsl(240 5% 64.9%);
   }
 }

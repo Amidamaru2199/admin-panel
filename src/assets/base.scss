@@ -87,11 +87,16 @@ button {
     font-size: 14px;
     font-weight: 500;
     color: hsl(0 0% 98%);
+    cursor: pointer;
 
     &_add {
       margin-right: 0;
       color: hsl(240 5.9% 10%);
       background-color: hsl(0 0% 98%);
+
+      &:hover {
+        background-color: hsla(0, 0%, 98%, 0.874);
+      }
 
       svg {
         color: hsl(240 5.9% 10%);

@@ -11,7 +11,7 @@
         <TheOkoLine v-else />
       </div>
 
-      <button class="block__header-button">Получить куки для серверов</button>
+      <button @click="getServerCookies" class="block__header-button">Получить куки для серверов</button>
 
       <AddServerDialog>
         <template #trigger>
@@ -40,30 +40,32 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
+          <tr v-for="el in usersStore.allServers" :key="el.id">
+            <td>{{ el.id }}</td>
             <td>
               <div>
-                <img src="https://flagcdn.com/40x30/nl.png" alt="flag" />
-                Амстердам
-                <span>(NL)</span>
+                <!--<img src="https://flagcdn.com/40x30/nl.png" alt="flag" />-->
+                {{ el.name }}
+                <span>({{ el.code }})</span>
               </div>
             </td>
-            <td>Нидерланды</td>
-            <td>213.108.21.188</td>
-            <td>Высокий пинг. Только если вам нужны именно США</td>
-            <td>Забит</td>
+            <td>{{ el.country }}</td>
+            <td>{{ el.ip }}</td>
+            <td>{{ el.description }}</td>
+            <td>{{ el.info }}</td>
             <td>
-              <TheSucsess />
+              <TheSucsess v-if="el.is_active" />
+              <TheBad v-else />
             </td>
             <td>
-              <TheSucsess />
+              <TheSucsess v-if="el.is_excluded" />
+              <TheBad v-else />
             </td>
-            <td>20</td>
-            <td>281</td>
+            <td>{{ el.weight }}</td>
+            <td>{{ el.user_count }}</td>
             <td>
               <div>
-                <AddServerDialog>
+                <AddServerDialog mode="edit" :server-data="el">
                   <template #trigger>
                     <TheFile class="servers__dialog-trigger" />
                   </template>
@@ -79,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import AddServerDialog from '@/components/AddServerDialog.vue'
 import TheSwitcher from '@/components/ui/TheSwitcher.vue'
 import TheOkoLine from '@/components/icons/TheOkoLine.vue'
@@ -87,6 +89,17 @@ import TheOko from '@/components/icons/TheOko.vue'
 import TheCross from '@/components/icons/TheCross.vue'
 import TheSucsess from '@/components/icons/TheSucsess.vue'
 import TheLink from '@/components/icons/TheLink.vue'
+import { useUsersStore } from '@/stores/index'
+
+const usersStore = useUsersStore()
+
+const getServerCookies = async () => {
+  await usersStore.fetchServerCookies()
+}
+
+onMounted(async () => {
+  await usersStore.fetchAllServers()
+})
 
 const switchState = ref(false)
 </script>
