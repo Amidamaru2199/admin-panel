@@ -30,12 +30,12 @@
             </div>
 
             <NumberFieldRoot class="servers__dialog-grid-item">
-              <NumberFieldDecrement class="servers__dialog-decrement" @click="vlessInboundId--">
+              <NumberFieldDecrement class="servers__dialog-decrement" @click="formData.vless_inbound_id--">
                 <TheMinus />
               </NumberFieldDecrement>
               <label for="">VLESS Inbound ID</label>
-              <NumberFieldInput v-model="vlessInboundId" />
-              <NumberFieldIncrement class="servers__dialog-increment" @click="vlessInboundId++">
+              <NumberFieldInput v-model="formData.vless_inbound_id" />
+              <NumberFieldIncrement class="servers__dialog-increment" @click="formData.vless_inbound_id++">
                 <ThePlus />
               </NumberFieldIncrement>
             </NumberFieldRoot>
@@ -45,7 +45,7 @@
               <input v-model="formData.public_key" placeholder="Публичный ключ" type="text" />
             </div>
             <div class="servers__dialog-grid-item servers__dialog-grid-item_switcher">
-              <TheSwitcher v-model="isActive" />
+              <TheSwitcher v-model="formData.is_active" />
               <span>Активный</span>
             </div>
           </div>
@@ -75,7 +75,7 @@
               <input v-model.number="formData.weight" placeholder="Вес" type="number" step="0.1" />
             </div>
             <div class="servers__dialog-grid-item servers__dialog-grid-item_switcher">
-              <TheSwitcher v-model="isExcluded" />
+              <TheSwitcher v-model="formData.is_excluded" />
               <span>Искл. из распределения</span>
             </div>
           </div>
@@ -143,9 +143,7 @@ const formData = ref({
   info: ''
 })
 
-const isActive = ref(true)
-const isExcluded = ref(false)
-const vlessInboundId = ref(1)
+// Убираем отдельные ref переменные, используем только formData
 
 // Computed свойства для заголовков
 const dialogTitle = computed(() => {
@@ -182,7 +180,7 @@ const isFormValid = computed(() => {
   )
 
   // Проверяем, что VLESS Inbound ID больше 0
-  const validVlessId = vlessInboundId.value > 0
+  const validVlessId = formData.value.vless_inbound_id > 0
 
   // Проверяем, что вес больше 0
   const validWeight = formData.value.weight > 0
@@ -199,40 +197,37 @@ const populateForm = (server) => {
     country: server.country || '',
     code: server.code || '',
     ip: server.ip || '',
-    vless_inbound_id: server.vless_inbound_id || 1,
+    vless_inbound_id: server.vless_inbound_id !== undefined ? Number(server.vless_inbound_id) : 1,
     public_key: server.public_key || '',
-    is_active: server.is_active ?? true,
+    is_active: server.is_active !== undefined ? server.is_active : true,
     port_panel: server.port_panel || '',
     uri_path: server.uri_path || '',
     password: server.password || '',
     port_key: server.port_key || '',
     short_id: server.short_id || '',
     weight: server.weight || 10.0,
-    is_excluded: server.is_excluded ?? false,
+    is_excluded: server.is_excluded !== undefined ? server.is_excluded : false,
     description: server.description || '',
     info: server.info || ''
   }
 
-  isActive.value = server.is_active ?? true
-  isExcluded.value = server.is_excluded ?? false
-  vlessInboundId.value = server.vless_inbound_id || 1
+  // Все значения уже установлены в formData выше
 }
 
-// Watcher для заполнения формы при изменении serverData
-watch(() => props.serverData, (newServerData) => {
-  if (newServerData && props.mode === 'edit') {
-    populateForm(newServerData)
+// Watcher для открытия диалога - заполняем форму только когда диалог открывается
+watch(() => dialogRef.value?.isOpen, (isOpen) => {
+  if (isOpen && props.mode === 'edit' && props.serverData) {
+    console.log('Dialog opened, populating form with:', props.serverData)
+    populateForm(props.serverData)
+    console.log('Form data after population:', formData.value)
   }
-}, { immediate: true })
+})
 
 const handleSave = async () => {
   try {
     // Подготавливаем данные для отправки
     const serverData = {
       ...formData.value,
-      is_active: isActive.value,
-      is_excluded: isExcluded.value,
-      vless_inbound_id: vlessInboundId.value,
       user_count: props.mode === 'edit' ? props.serverData?.user_count || 0 : 0,
       cookie: props.mode === 'edit' ? props.serverData?.cookie || 'session=' : 'session='
     }
@@ -277,9 +272,7 @@ const resetForm = () => {
     description: '',
     info: ''
   }
-  isActive.value = true
-  isExcluded.value = false
-  vlessInboundId.value = 1
+  // Все значения уже сброшены в formData выше
 }
 </script>
 

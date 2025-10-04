@@ -34,7 +34,6 @@ export const useUsersStore = defineStore('users', () => {
 
     try {
       const data = await getAllServers()
-      console.log(data.сервера)
 
       allServers.value = data.сервера
     } catch (err) {

@@ -7,9 +7,21 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-const switchState = ref(false)
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const emit = defineEmits(['update:modelValue'])
+
+const switchState = ref(props.modelValue)
+
+// Синхронизируем внутреннее состояние с внешним
+watch(() => props.modelValue, (newValue) => {
+  switchState.value = newValue
+}, { immediate: true })
 
 watch(switchState, (newValue) => {
   emit('update:modelValue', newValue)

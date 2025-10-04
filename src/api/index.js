@@ -37,8 +37,6 @@ export const getAllServers = async () => {
 
     const data = await response.json()
 
-    console.log('data', data)
-
     return data
   } catch (e) {
     console.error('getAllServers error:', e)
@@ -61,8 +59,7 @@ export const getServerCookies = async () => {
 
     // Возвращаем текст, так как API возвращает text/plain
     const data = await response.text()
-    
-    console.log('cookies', data)
+
 
     return data
   } catch (e) {
@@ -87,8 +84,7 @@ export const createServer = async (serverData) => {
 
     // Возвращаем текст, так как API возвращает text/plain
     const data = await response.text()
-    
-    console.log('server created', data)
+
 
     return data
   } catch (e) {
@@ -113,8 +109,6 @@ export const updateServer = async (serverId, serverData) => {
 
     // Возвращаем текст, так как API возвращает text/plain
     const data = await response.text()
-    
-    console.log('server updated', data)
 
     return data
   } catch (e) {
