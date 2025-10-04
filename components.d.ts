@@ -102,5 +102,7 @@ declare module 'vue' {
     TheSelectArrow: typeof import('./src/components/icons/TheSelectArrow.vue')['default']
     TheSucsess: typeof import('./src/components/icons/TheSucsess.vue')['default']
     TheSwitcher: typeof import('./src/components/ui/TheSwitcher.vue')['default']
+    TheTelegram: typeof import('./src/components/icons/TheTelegram.vue')['default']
+    UtmDialog: typeof import('./src/components/UtmDialog.vue')['default']
   }
 }

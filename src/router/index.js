@@ -3,6 +3,8 @@ import TheDashboard from '../views/TheDashboard.vue'
 import TheServers from '@/views/TheServers.vue'
 import TheTariffs from '@/views/TheTariffs.vue'
 import TheUsers from '@/views/TheUsers.vue'
+import TheUtmCodes from '@/views/TheUtmCodes.vue'
+import TheNewsletter from '@/views/TheNewsletter.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +28,16 @@ const router = createRouter({
       path: '/users',
       name: 'users',
       component: TheUsers,
+    },
+    {
+      path: '/utm',
+      name: 'utm',
+      component: TheUtmCodes,
+    },
+    {
+      path: '/newsletter',
+      name: 'newsletter',
+      component: TheNewsletter,
     },
     // {
     //   path: '/about',
