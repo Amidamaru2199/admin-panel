@@ -29,13 +29,13 @@
               <input v-model="formData.ip" placeholder="IP адрес" type="text" />
             </div>
 
-            <NumberFieldRoot class="servers__dialog-grid-item">
-              <NumberFieldDecrement class="servers__dialog-decrement" @click="formData.vless_inbound_id--">
+            <NumberFieldRoot class="servers__dialog-grid-item" v-model="formData.vless_inbound_id">
+              <NumberFieldDecrement class="servers__dialog-decrement">
                 <TheMinus />
               </NumberFieldDecrement>
               <label for="">VLESS Inbound ID</label>
-              <NumberFieldInput v-model="formData.vless_inbound_id" />
-              <NumberFieldIncrement class="servers__dialog-increment" @click="formData.vless_inbound_id++">
+              <NumberFieldInput />
+              <NumberFieldIncrement class="servers__dialog-increment">
                 <ThePlus />
               </NumberFieldIncrement>
             </NumberFieldRoot>
@@ -131,19 +131,17 @@ const formData = ref({
   ip: '',
   vless_inbound_id: 1,
   public_key: '',
-  is_active: true,
+  is_active: false,
   port_panel: '',
   uri_path: '',
   password: '',
   port_key: '',
   short_id: '',
-  weight: 10.0,
+  weight: 0,
   is_excluded: false,
   description: '',
   info: ''
 })
-
-// Убираем отдельные ref переменные, используем только formData
 
 // Computed свойства для заголовков
 const dialogTitle = computed(() => {
@@ -192,34 +190,32 @@ const isFormValid = computed(() => {
 const populateForm = (server) => {
   if (!server) return
 
+  const vlessId = server.vless_inbound_id !== undefined ? Number(server.vless_inbound_id) : 1
+
   formData.value = {
     name: server.name || '',
     country: server.country || '',
     code: server.code || '',
     ip: server.ip || '',
-    vless_inbound_id: server.vless_inbound_id !== undefined ? Number(server.vless_inbound_id) : 1,
+    vless_inbound_id: vlessId,
     public_key: server.public_key || '',
-    is_active: server.is_active !== undefined ? server.is_active : true,
+    is_active: server.is_active !== undefined ? server.is_active : false,
     port_panel: server.port_panel || '',
     uri_path: server.uri_path || '',
     password: server.password || '',
     port_key: server.port_key || '',
     short_id: server.short_id || '',
-    weight: server.weight || 10.0,
+    weight: server.weight || 0,
     is_excluded: server.is_excluded !== undefined ? server.is_excluded : false,
     description: server.description || '',
     info: server.info || ''
   }
-
-  // Все значения уже установлены в formData выше
 }
 
 // Watcher для открытия диалога - заполняем форму только когда диалог открывается
 watch(() => dialogRef.value?.isOpen, (isOpen) => {
   if (isOpen && props.mode === 'edit' && props.serverData) {
-    console.log('Dialog opened, populating form with:', props.serverData)
     populateForm(props.serverData)
-    console.log('Form data after population:', formData.value)
   }
 })
 
@@ -261,13 +257,13 @@ const resetForm = () => {
     ip: '',
     vless_inbound_id: 1,
     public_key: '',
-    is_active: true,
+    is_active: false,
     port_panel: '',
     uri_path: '',
     password: '',
     port_key: '',
     short_id: '',
-    weight: 10.0,
+    weight: 0,
     is_excluded: false,
     description: '',
     info: ''

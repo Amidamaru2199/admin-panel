@@ -1,12 +1,33 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getUserCount, getAllServers, getServerCookies, createServer, updateServer } from '@/api/index.js'
+import { getUserCount, getAllServers, getAllTariffs, getAllUsers, getServerCookies, createServer, updateServer, createTariff } from '@/api/index.js'
 import { useToast } from '@/composables/useToast'
 
 export const useUsersStore = defineStore('users', () => {
   const userStats = ref(null)
   const allServers = ref(null)
+  const allTariffs = ref(null)
+  const allUsers = ref(null)
   const serverCookies = ref(null)
+  
+  // Состояние для фильтрации и пагинации пользователей
+  const usersFilters = ref({
+    tgID: '',
+    username: '',
+    tariff: '',
+    regMinDate: '',
+    regMaxDate: '',
+    subMinDate: '',
+    subMaxDate: '',
+    offset: 0,
+    limit: 50
+  })
+  
+  const usersPagination = ref({
+    currentPage: 1,
+    totalItems: 0,
+    itemsPerPage: 50
+  })
 
   const isLoading = ref(false)
   const error = ref(null)
@@ -39,6 +60,46 @@ export const useUsersStore = defineStore('users', () => {
     } catch (err) {
       error.value = err
       console.error('Failed to fetch user stats:', err)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const fetchAllTariffs = async () => {
+    isLoading.value = true
+    error.value = null
+
+    try {
+      const data = await getAllTariffs()
+
+      allTariffs.value = data.тарифы
+    } catch (err) {
+      error.value = err
+      console.error('Failed to fetch user stats:', err)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const fetchAllUsers = async (customFilters = {}) => {
+    isLoading.value = true
+    error.value = null
+
+    try {
+      // Объединяем текущие фильтры с переданными
+      const filters = { ...usersFilters.value, ...customFilters }
+      
+      const data = await getAllUsers(filters)
+
+      allUsers.value = data.юзеры || []
+      
+      // Обновляем пагинацию
+      usersPagination.value.totalItems = data.total || allUsers.value.length
+      usersPagination.value.currentPage = Math.floor(filters.offset / filters.limit) + 1
+      
+    } catch (err) {
+      error.value = err
+      console.error('Failed to fetch users:', err)
     } finally {
       isLoading.value = false
     }
@@ -104,6 +165,41 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
+  const addTariff = async (serverData) => {
+    isLoading.value = true
+    error.value = null
+
+    try {
+      const data = await createTariff(serverData)
+      
+      // Показываем успешный тост
+      success(
+        'Тариф создан',
+        'Новый тариф успешно добавлен',
+        { duration: 3000 }
+      )
+      
+      // Обновляем список серверов
+      await fetchAllTariffs()
+      
+      return data
+    } catch (err) {
+      error.value = err
+      console.error('Failed to create tariff:', err)
+      
+      // Показываем тост с ошибкой
+      showError(
+        'Ошибка создания тарифа',
+        'Не удалось создать новый тариф',
+        { duration: 5000 }
+      )
+      
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   const editServer = async (serverId, serverData) => {
     isLoading.value = true
     error.value = null
@@ -139,17 +235,64 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
+  // Методы для управления фильтрами пользователей
+  const updateUsersFilters = (newFilters) => {
+    usersFilters.value = { ...usersFilters.value, ...newFilters }
+  }
+
+  const resetUsersFilters = () => {
+    usersFilters.value = {
+      tgID: '',
+      username: '',
+      tariff: '',
+      regMinDate: '',
+      regMaxDate: '',
+      subMinDate: '',
+      subMaxDate: '',
+      offset: 0,
+      limit: 50
+    }
+  }
+
+  const goToUsersPage = (page) => {
+    const offset = (page - 1) * usersFilters.value.limit
+    usersFilters.value.offset = offset
+    usersPagination.value.currentPage = page
+    fetchAllUsers()
+  }
+
+  const changeUsersPageSize = (newSize) => {
+    usersFilters.value.limit = newSize
+    usersFilters.value.offset = 0
+    usersPagination.value.currentPage = 1
+    usersPagination.value.itemsPerPage = newSize
+    fetchAllUsers()
+  }
+
   return {
     userStats,
     allServers,
+    allTariffs,
+    allUsers,
     serverCookies,
+    usersFilters,
+    usersPagination,
     isLoading,
     error,
 
     fetchUserStats,
     fetchAllServers,
+    fetchAllTariffs,
+    fetchAllUsers,
     fetchServerCookies,
     addServer,
+    addTariff,
     editServer,
+    
+    // Методы для работы с пользователями
+    updateUsersFilters,
+    resetUsersFilters,
+    goToUsersPage,
+    changeUsersPageSize,
   }
 })

@@ -40,7 +40,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="el in usersStore.allServers" :key="el.id">
+          <tr v-for="el in filteredServers" :key="el.id" :class="{ 'tr-inactive': !el.is_active }">
             <td>{{ el.id }}</td>
             <td>
               <div>
@@ -81,17 +81,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import AddServerDialog from '@/components/AddServerDialog.vue'
 import TheSwitcher from '@/components/ui/TheSwitcher.vue'
 import TheOkoLine from '@/components/icons/TheOkoLine.vue'
 import TheOko from '@/components/icons/TheOko.vue'
 import TheCross from '@/components/icons/TheCross.vue'
 import TheSucsess from '@/components/icons/TheSucsess.vue'
+import TheBad from '@/components/icons/TheBad.vue'
+import TheFile from '@/components/icons/TheFile.vue'
 import TheLink from '@/components/icons/TheLink.vue'
 import { useUsersStore } from '@/stores/index'
 
 const usersStore = useUsersStore()
+
+const switchState = ref(false)
+
+// Computed свойство для фильтрации серверов
+const filteredServers = computed(() => {
+  if (!usersStore.allServers) return []
+
+  if (switchState.value) {
+    // Показываем все серверы
+    return usersStore.allServers
+  } else {
+    // Показываем только активные серверы
+    return usersStore.allServers.filter(server => server.is_active === true)
+  }
+})
 
 const getServerCookies = async () => {
   await usersStore.fetchServerCookies()
@@ -100,8 +117,6 @@ const getServerCookies = async () => {
 onMounted(async () => {
   await usersStore.fetchAllServers()
 })
-
-const switchState = ref(false)
 </script>
 
 <style lang="scss">

@@ -3,15 +3,14 @@
     <div class="block__header">
       <div class="block__header-text">
         <h1 class="block__title">Рассылки</h1>
-        <span class="block__subtitle"
-          >Отправка рассылок пользователям с выбранными параметрами</span
-        >
+        <span class="block__subtitle">Отправка рассылок пользователям с выбранными параметрами</span>
       </div>
     </div>
 
     <div class="newsletter__grid">
       <div class="newsletter__left">
         <div class="newsletter__input-group">
+          /tg/send
           <label for="">Картинка для рассылки</label>
           <input placeholder="Файл не выбран" type="file" />
         </div>
@@ -31,16 +30,9 @@
         </div>
       </div>
       <div class="newsletter__right">
-        <span class="newsletter__swither-text"
-          >Фильтр по пользователям которые получат рассылку</span
-        >
+        <span class="newsletter__swither-text">Фильтр по пользователям которые получат рассылку</span>
         <TheSelect v-model="tarif" placeholder="Тариф" aria-label="Тариф" :options="tarifOptions" />
-        <TheSelect
-          v-model="server"
-          placeholder="Сервер"
-          aria-label="Сервер"
-          :options="serverOptions"
-        />
+        <TheSelect v-model="server" placeholder="Сервер" aria-label="Сервер" :options="serverOptions" />
         <div class="servers__dialog-grid-item">
           <input placeholder="Юзернейм" type="text" />
         </div>
@@ -48,26 +40,12 @@
           <input placeholder="TGid" type="text" />
         </div>
         <div class="newsletter__pickers">
-          <TheDatePicker
-            id="date-start-field"
-            label="Дата регистрации"
-            :is-date-unavailable="(date) => date.day === 19"
-          />
-          <TheDatePicker
-            id="date-start-field"
-            label="&nbsp;"
-            :is-date-unavailable="(date) => date.day === 19"
-          />
-          <TheDatePicker
-            id="date-end-field"
-            label="Дата окончания подписки"
-            :is-date-unavailable="(date) => date.day === 19"
-          />
-          <TheDatePicker
-            id="date-end-field"
-            label="&nbsp;"
-            :is-date-unavailable="(date) => date.day === 19"
-          />
+          <TheDatePicker id="date-start-field" label="Дата регистрации"
+            :is-date-unavailable="(date) => date.day === 19" />
+          <TheDatePicker id="date-start-field" label="&nbsp;" :is-date-unavailable="(date) => date.day === 19" />
+          <TheDatePicker id="date-end-field" label="Дата окончания подписки"
+            :is-date-unavailable="(date) => date.day === 19" />
+          <TheDatePicker id="date-end-field" label="&nbsp;" :is-date-unavailable="(date) => date.day === 19" />
         </div>
       </div>
     </div>
@@ -112,15 +90,18 @@ const serverOptions = [
     gap: 48px;
     margin-top: 24px;
   }
+
   &__left {
     display: grid;
     gap: 12px;
   }
+
   &__right {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
+
   &__input-group {
     display: flex;
     flex-direction: column;
@@ -133,6 +114,7 @@ const serverOptions = [
     }
 
     &:hover {
+
       .servers__dialog-increment,
       .servers__dialog-decrement {
         display: flex;
@@ -180,6 +162,7 @@ const serverOptions = [
     display: flex;
     justify-content: space-between;
   }
+
   &__button {
     display: inline-flex;
     align-items: center;
@@ -209,6 +192,7 @@ const serverOptions = [
     font-weight: 500;
     color: hsl(0 0% 98%);
   }
+
   &__pickers {
     display: grid;
     grid-template-columns: 1fr 1fr;

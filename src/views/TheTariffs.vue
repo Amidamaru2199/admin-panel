@@ -34,14 +34,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>На 6 месяцев</td>
+          <tr v-for="el in filteredTariffs" :key="el.id" :class="{ 'tr-inactive': !el.is_hidden }">
+            <td>{{ el.id }}</td>
+            <td>{{ el.name }}</td>
             <td></td>
-            <td>519</td>
-            <td>180</td>
+            <td>{{ el.price }}</td>
+            <td>{{ el.days }}</td>
             <td>
-              <TheSucsess />
+              <TheSucsess v-if="el.is_hidden" />
+              <TheBad v-else />
             </td>
             <td>
               <DropdownMenuRoot>
@@ -51,7 +52,7 @@
 
                 <DropdownMenuPortal>
                   <DropdownMenuContent class="tariffs__dropdown-content" align="end">
-                    <CreateTarifDialog>
+                    <CreateTarifDialog mode="edit" :tariff-data="el">
                       <template #trigger>
                         <div class="tariffs__dropdown-item">Редактировать</div>
                       </template>
@@ -68,9 +69,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import CreateTarifDialog from '@/components/CreateTarifDialog.vue'
+import TheSucsess from '@/components/icons/TheSucsess.vue'
+import TheBad from '@/components/icons/TheBad.vue'
+import { useUsersStore } from '@/stores/index'
+
+const usersStore = useUsersStore()
 const switchState = ref(false)
+
+const filteredTariffs = computed(() => {
+  if (!usersStore.allTariffs) return []
+
+  if (switchState.value) {
+    // Показываем все серверы
+    return usersStore.allTariffs
+  } else {
+    // Показываем только активные серверы
+    return usersStore.allTariffs.filter(tariff => tariff.is_hidden === true)
+  }
+})
+
+onMounted(async () => {
+  await usersStore.fetchAllTariffs()
+  console.log(usersStore.allTariffs);
+})
 </script>
 
 <style lang="scss">

@@ -132,6 +132,11 @@ button {
         &:hover {
           background-color: hsl(240deg 3.7% 15.9% / 50%);
         }
+
+        &.tr-inactive * {
+          opacity: 0.8;
+          color: hsl(240 5% 64.9%) !important;
+        }
       }
 
       th {

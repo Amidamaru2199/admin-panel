@@ -38,16 +38,35 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in 10" :key="index">
-            <td>26115</td>
-            <td>Андрей</td>
-            <td>@BigBoaKaa</td>
-            <td>492526355</td>
-            <td>Активный</td>
-            <td>На 6 месяцев</td>
-            <td>Стокгольм</td>
-            <td>15/12/25, 15:04</td>
-            <td>13/06/25, 15:04</td>
+          <tr v-if="usersStore.isLoading">
+            <td colspan="10" class="users__loading">
+              Загрузка пользователей...
+            </td>
+          </tr>
+          <tr v-else-if="usersStore.error">
+            <td colspan="10" class="users__error">
+              Ошибка загрузки: {{ usersStore.error.message }}
+            </td>
+          </tr>
+          <tr v-else-if="!usersStore.allUsers || usersStore.allUsers.length === 0">
+            <td colspan="10" class="users__empty">
+              Пользователи не найдены
+            </td>
+          </tr>
+          <tr v-else v-for="user in usersStore.allUsers" :key="user.id">
+            <td>{{ user.id }}</td>
+            <td>{{ user.full_name }}</td>
+            <td>{{ user.username ? '@' + user.username : '' }}</td>
+            <td>{{ user.tg_id }}</td>
+            <td>
+              <span :class="{ 'users__status-active': user.is_active, 'users__status-inactive': !user.is_active }">
+                {{ user.is_active ? 'Активный' : 'Неактивный' }}
+              </span>
+            </td>
+            <td>{{ user.tariff_id }}</td>
+            <td>{{ user.server_id }}</td>
+            <td>{{ formatDate(user.subscription) }}</td>
+            <td>{{ formatDate(user.registered_at) }}</td>
             <td>
               <DropdownMenuRoot>
                 <DropdownMenuTrigger>
@@ -55,10 +74,10 @@
                 </DropdownMenuTrigger>
 
                 <DropdownMenuPortal>
-                  <DropdownMenuContent class="tariffs__dropdown-content" align="end">
+                  <DropdownMenuContent class="users__dropdown-content" align="end">
                     <AddTimeDialog>
                       <template #trigger>
-                        <div class="tariffs__dropdown-item">Добаить время</div>
+                        <div class="users__dropdown-item">Добавить время</div>
                       </template>
                     </AddTimeDialog>
                   </DropdownMenuContent>
@@ -69,24 +88,62 @@
         </tbody>
       </table>
     </div>
-    <ThePagination :total-items="37659" :items-per-page="20" :current-page="currentPage"
+    <ThePagination :total-items="usersStore.usersPagination.totalItems"
+      :items-per-page="usersStore.usersPagination.itemsPerPage" :current-page="currentPage"
       @update:current-page="handlePageChange" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import AddTimeDialog from '@/components/AddTimeDialog.vue'
 import FilterDialog from '@/components/FilterDialog.vue'
 import GroupTimeDialog from '@/components/GroupTimeDialog.vue'
 import ThePagination from '@/components/ui/ThePagination.vue'
+import { useUsersStore } from '@/stores/index'
 
-const currentPage = ref(1)
+const usersStore = useUsersStore()
 
+// Computed свойства для пагинации
+const totalPages = computed(() => {
+  return Math.ceil(usersStore.usersPagination.totalItems / usersStore.usersPagination.itemsPerPage)
+})
+
+const currentPage = computed(() => {
+  return usersStore.usersPagination.currentPage
+})
+
+// Обработчик изменения страницы
 const handlePageChange = (page) => {
-  currentPage.value = page
-  // Здесь можно добавить логику загрузки данных для новой страницы
-  console.log('Переход на страницу:', page)
+  usersStore.goToUsersPage(page)
+}
+
+// Загрузка пользователей при монтировании компонента
+onMounted(async () => {
+  await usersStore.fetchAllUsers()
+})
+
+// Watcher для автоматической загрузки при изменении фильтров
+watch(() => usersStore.usersFilters, async () => {
+  await usersStore.fetchAllUsers()
+}, { deep: true })
+
+// Функция для форматирования дат
+const formatDate = (dateString) => {
+  if (!dateString) return 'Не указано'
+
+  try {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  } catch (error) {
+    return 'Неверная дата'
+  }
 }
 </script>
 
@@ -94,6 +151,42 @@ const handlePageChange = (page) => {
 .users {
   &__dialog-trigger {
     cursor: pointer;
+  }
+
+  &__loading,
+  &__error,
+  &__empty {
+    text-align: center;
+    padding: 20px;
+    color: hsl(0 0% 64.9%);
+    font-style: italic;
+  }
+
+  &__error {
+    color: hsl(0 62.8% 30.6%);
+  }
+
+  &__status-active {
+    color: hsl(142 76% 36%);
+    font-weight: 500;
+  }
+
+  &__status-inactive {
+    color: hsl(0 62.8% 30.6%);
+    font-weight: 500;
+  }
+
+  &__dropdown-trigger {
+    background: none;
+    border: none;
+    color: hsl(0 0% 98%);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: hsl(240deg 3.7% 25%);
+    }
   }
 
   &__dropdown-content {

@@ -1,65 +1,151 @@
 <template>
-  <TheDialog>
+  <TheDialog ref="dialogRef">
     <template #trigger>
       <slot name="trigger" />
     </template>
 
-    <template #title>Создать тариф</template>
+    <template #title>{{ dialogTitle }}</template>
 
-    <template #description>Заполните информацию о новом тарифе</template>
+    <template #description>{{ dialogDescription }}</template>
 
     <template #body>
-      <div class="tarif__dialog-grid">
-        <div class="tarif__dialog-group">
-          <div class="tarif__dialog-grid-item">
-            <label for="">Название</label>
-            <input type="text" />
-          </div>
-          <div class="tarif__dialog-grid-item">
-            <label for="">Описание</label>
-            <input type="text" />
-          </div>
-          <div class="tarif__dialog-grid-item">
-            <label for="">Цена</label>
-            <input type="text" />
-          </div>
+      <form id="tarif-form" @submit.prevent="handleSave">
+        <div class="tarif__dialog-grid">
+          <div class="tarif__dialog-group">
+            <div class="tarif__dialog-grid-item">
+              <label for="">Название</label>
+              <input v-model="formData.name" type="text" />
+            </div>
+            <div class="tarif__dialog-grid-item">
+              <label for="">Описание</label>
+              <input v-model="formData.description" type="text" />
+            </div>
+            <div class="tarif__dialog-grid-item">
+              <label for="">Цена</label>
+              <input v-model="formData.price" type="text" />
+            </div>
 
-          <NumberFieldRoot class="tarif__dialog-grid-item">
-            <NumberFieldDecrement class="tarif__dialog-decrement">
-              <TheMinus />
-            </NumberFieldDecrement>
-            <label for="">Дни</label>
-            <NumberFieldInput />
-            <NumberFieldIncrement class="tarif__dialog-increment">
-              <ThePlus />
-            </NumberFieldIncrement>
-          </NumberFieldRoot>
+            <NumberFieldRoot v-model="formData.days" class="tarif__dialog-grid-item">
+              <NumberFieldDecrement class="tarif__dialog-decrement">
+                <TheMinus />
+              </NumberFieldDecrement>
+              <label for="">Дни</label>
+              <NumberFieldInput />
+              <NumberFieldIncrement class="tarif__dialog-increment">
+                <ThePlus />
+              </NumberFieldIncrement>
+            </NumberFieldRoot>
 
-          <div class="tarif__dialog-grid-item">
-            <label for="">Публичный ключ</label>
-            <input type="text" />
-          </div>
-          <div class="tarif__dialog-grid-item tarif__dialog-grid-item_switcher">
-            <span>Скрыт</span>
-            <TheSwitcher v-model="switchState" />
+            <div class="tarif__dialog-grid-item tarif__dialog-grid-item_switcher">
+              <span>Скрыт</span>
+              <TheSwitcher v-model="formData.is_hidden" />
+            </div>
           </div>
         </div>
-      </div>
+      </form>
     </template>
 
     <template #footer>
-      <button class="tarif__dialog-save-button">Отмена</button>
-      <button class="tarif__dialog-save-button">Сохранить</button>
+      <button type="button" @click="dialogRef.isOpen = false" class="tarif__dialog-save-button">Отмена</button>
+      <button type="submit" form="tarif-form" class="tarif__dialog-save-button">{{ buttonText }}</button>
     </template>
   </TheDialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TheDialog from '@/components/ui/TheDialog.vue'
 import TheSwitcher from '@/components/ui/TheSwitcher.vue'
+import { useUsersStore } from '@/stores/index'
 
-const switchState = ref(false)
+const props = defineProps({
+  mode: {
+    type: String,
+    default: 'create', // 'create' или 'edit'
+    validator: (value) => ['create', 'edit'].includes(value)
+  },
+  tariffData: {
+    type: Object,
+    default: null // Данные сервера для редактирования
+  }
+})
+
+const usersStore = useUsersStore()
+const dialogRef = ref(null)
+
+const formData = ref({
+  name: '',
+  price: '',
+  days: '',
+  description: '',
+  is_hidden: false,
+})
+
+// Computed свойства для заголовков
+const dialogTitle = computed(() => {
+  return props.mode === 'edit' ? 'Редактировать тариф' : 'Создать тариф'
+})
+
+const dialogDescription = computed(() => {
+  return props.mode === 'edit' ? 'Внесите изменения в тариф' : 'Заполните информацию о новом тарифе'
+})
+
+const buttonText = computed(() => {
+  return props.mode === 'edit' ? 'Создать' : 'Сохранить'
+})
+
+// Функция для заполнения формы данными сервера
+const populateForm = (tariff) => {
+  if (!tariff) return
+
+  formData.value = {
+    name: tariff.name || '',
+    price: tariff.price || '',
+    days: tariff.days || '',
+    description: tariff.description || '',
+    is_hidden: tariff.is_hidden !== undefined ? tariff.is_hidden : false,
+  }
+}
+
+// Watcher для открытия диалога - заполняем форму только когда диалог открывается
+watch(() => dialogRef.value?.isOpen, (isOpen) => {
+  if (isOpen && props.mode === 'edit' && props.tariffData) {
+    populateForm(props.tariffData)
+  }
+})
+
+const handleSave = async () => {
+  try {
+    // Вызываем соответствующий метод в зависимости от режима
+    if (props.mode === 'edit') {
+      // await usersStore.editServer(props.tariffData.id, formData)
+    } else {
+      await usersStore.addTariff(formData.value)
+    }
+
+    // Закрываем диалог после успешного сохранения
+    if (dialogRef.value) {
+      dialogRef.value.isOpen = false
+    }
+
+    // Сбрасываем форму только при создании
+    if (props.mode === 'create') {
+      resetForm()
+    }
+  } catch (error) {
+    console.error('Error saving server:', error)
+  }
+}
+
+const resetForm = () => {
+  formData.value = {
+    name: '',
+    price: '',
+    days: '',
+    description: '',
+    is_hidden: false,
+  }
+}
 </script>
 
 <style lang="scss">
@@ -102,6 +188,7 @@ const switchState = ref(false)
   position: relative;
 
   &:hover {
+
     .tarif__dialog-increment,
     .tarif__dialog-decrement {
       display: flex;
