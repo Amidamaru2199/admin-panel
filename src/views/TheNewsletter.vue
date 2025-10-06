@@ -28,7 +28,6 @@
 			<div class="newsletter__right">
 				<span class="newsletter__swither-text">Фильтр по пользователям которые получат рассылку</span>
 				<TheSelect v-model="tarif" placeholder="Тариф" aria-label="Тариф" :options="tariffOptions" />
-				<TheSelect v-model="server" placeholder="Сервер" aria-label="Сервер" :options="serverOptions" />
 				<div class="servers__dialog-grid-item">
 					<input id="username" name="username" v-model="usersFilters.username" placeholder="Юзернейм"
 						type="text" />
@@ -60,7 +59,6 @@ const fileInput = ref(null)
 const selectedFile = ref(null)
 const message = ref('')
 const tarif = ref('')
-const server = ref('')
 const usersFilters = ref({
 	tgID: '',
 	username: '',
@@ -72,10 +70,7 @@ const usersFilters = ref({
 })
 
 onMounted(async () => {
-	await Promise.all([
-		usersStore.fetchAllTariffs(),
-		usersStore.fetchAllServers()
-	])
+	usersStore.fetchAllTariffs()
 })
 
 const disabledSendButton = computed(() => {
@@ -89,17 +84,6 @@ const tariffOptions = computed(() => {
 	return usersStore.allTariffs.map(tariff => ({
 		label: tariff.name,
 		value: tariff.id
-	}))
-})
-
-const serverOptions = computed(() => {
-	if (!usersStore.allServers || !Array.isArray(usersStore.allServers)) {
-		return []
-	}
-
-	return usersStore.allServers.map(server => ({
-		label: server.name,
-		value: server.id
 	}))
 })
 
@@ -227,7 +211,7 @@ const sendNewsletter = async () => {
 		}
 
 		textarea {
-			height: 240px;
+			height: 191px;
 			padding: 12px;
 		}
 	}
@@ -253,6 +237,11 @@ const sendNewsletter = async () => {
 			pointer-events: none;
 			opacity: 0.5;
 			cursor: not-allowed;
+		}
+
+		&:hover {
+			background-color: hsl(0 0% 98%);
+			opacity: 0.8;
 		}
 
 		svg {
