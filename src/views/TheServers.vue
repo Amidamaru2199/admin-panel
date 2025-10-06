@@ -44,7 +44,7 @@
             <td>{{ el.id }}</td>
             <td>
               <div>
-                <!--<img src="https://flagcdn.com/40x30/nl.png" alt="flag" />-->
+                <img :src="getFlagUrl(el.code)" alt="flag" />
                 {{ el.name }}
                 <span>({{ el.code }})</span>
               </div>
@@ -114,6 +114,11 @@ const getServerCookies = async () => {
   await usersStore.fetchServerCookies()
 }
 
+const getFlagUrl = (countryCode) => {
+  if (!countryCode) return ''
+  return `https://flagcdn.com/40x30/${countryCode.toLowerCase()}.png`
+}
+
 onMounted(async () => {
   await usersStore.fetchAllServers()
 })
@@ -123,6 +128,32 @@ onMounted(async () => {
 .servers {
   &__dialog-trigger {
     cursor: pointer;
+  }
+
+  &__server-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__flag {
+    width: 24px;
+    height: 18px;
+    border-radius: 2px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__server-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__code {
+    font-size: 12px;
+    color: hsl(0 0% 64.9%);
+    font-weight: 400;
   }
 }
 </style>
