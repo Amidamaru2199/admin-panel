@@ -75,7 +75,7 @@
 
                 <DropdownMenuPortal>
                   <DropdownMenuContent class="users__dropdown-content" align="end">
-                    <AddTimeDialog>
+                    <AddTimeDialog :tg-id="user.tg_id">
                       <template #trigger>
                         <div class="users__dropdown-item">Добавить время</div>
                       </template>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import AddTimeDialog from '@/components/AddTimeDialog.vue'
 import FilterDialog from '@/components/FilterDialog.vue'
 import GroupTimeDialog from '@/components/GroupTimeDialog.vue'
@@ -104,11 +104,7 @@ import { useUsersStore } from '@/stores/index'
 
 const usersStore = useUsersStore()
 
-// Computed свойства для пагинации
-const totalPages = computed(() => {
-  return Math.ceil(usersStore.usersPagination.totalItems / usersStore.usersPagination.itemsPerPage)
-})
-
+// Computed свойство для текущей страницы
 const currentPage = computed(() => {
   return usersStore.usersPagination.currentPage
 })

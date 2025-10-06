@@ -1,7 +1,7 @@
 <template>
     <div class="date-picker-wrapper">
         <label v-if="label" class="date-picker-label" :for="id">{{ label }}</label>
-        <DatePickerRoot :id="id" :is-date-unavailable="isDateUnavailable">
+        <DatePickerRoot :id="id" :is-date-unavailable="isDateUnavailable" :locale="'ru'">
             <DatePickerField v-slot="{ segments }" class="date-picker-field">
                 <div class="date-picker-input">
                     <template v-for="item in segments" :key="item.part">
@@ -60,9 +60,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import ThePicker from '@/components/icons/ThePicker.vue'
-
+// :is-date-unavailable="(date) => date.day === 19" для отключения дней, чтобы число стало дисабельным
 const props = defineProps({
     id: {
         type: String,

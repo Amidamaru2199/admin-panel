@@ -8,9 +8,9 @@
         <SelectPortal>
             <SelectContent class="select-content" :side="side" :align="align" :side-offset="sideOffset"
                 :align-offset="alignOffset" :avoid-collisions="avoidCollisions" :sticky="sticky">
-                <SelectScrollUpButton class="select-scroll-button">
+                <!-- <SelectScrollUpButton class="select-scroll-button">
                     <TheSelectArrow />
-                </SelectScrollUpButton>
+                </SelectScrollUpButton> -->
 
                 <SelectViewport class="select-viewport">
                     <SelectLabel v-if="label" class="select-label">
@@ -19,9 +19,9 @@
                     <SelectGroup>
                         <SelectItem v-for="(option, index) in options" :key="index" class="select-item"
                             :value="option.value || option" :disabled="option.disabled">
-                            <SelectItemIndicator class="select-item-indicator">
+                            <!-- <SelectItemIndicator class="select-item-indicator">
                                 <Icon icon="radix-icons:check" />
-                            </SelectItemIndicator>
+                            </SelectItemIndicator> -->
                             <SelectItemText>
                                 {{ option.label || option }}
                             </SelectItemText>
@@ -29,9 +29,9 @@
                     </SelectGroup>
                 </SelectViewport>
 
-                <SelectScrollDownButton class="select-scroll-button">
+                <!-- <SelectScrollDownButton class="select-scroll-button">
                     <Icon icon="radix-icons:chevron-down" />
-                </SelectScrollDownButton>
+                </SelectScrollDownButton> -->
             </SelectContent>
         </SelectPortal>
     </SelectRoot>

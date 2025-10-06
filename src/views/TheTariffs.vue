@@ -92,7 +92,6 @@ const filteredTariffs = computed(() => {
 
 onMounted(async () => {
   await usersStore.fetchAllTariffs()
-  console.log(usersStore.allTariffs);
 })
 </script>
 

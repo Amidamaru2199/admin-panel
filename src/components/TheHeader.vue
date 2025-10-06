@@ -9,7 +9,7 @@
       <RouterLink to="/servers">Сервера</RouterLink>
       <RouterLink to="/tariffs">Тарифы</RouterLink>
       <RouterLink to="/users">Пользователи</RouterLink>
-      <RouterLink to="/utm">UTM коды</RouterLink>
+      <!-- <RouterLink to="/utm">UTM коды</RouterLink> -->
       <RouterLink to="/newsletter">Рассылки</RouterLink>
     </nav>
 

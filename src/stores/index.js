@@ -1,298 +1,374 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getUserCount, getAllServers, getAllTariffs, getAllUsers, getServerCookies, createServer, updateServer, createTariff } from '@/api/index.js'
+import { getUserCount, getAllServers, getAllTariffs, getAllUsers, getServerCookies, createServer, updateServer, createTariff, updateUserSub as apiUpdateUserSub, sendNewsletter } from '@/api/index.js'
 import { useToast } from '@/composables/useToast'
 
 export const useUsersStore = defineStore('users', () => {
-  const userStats = ref(null)
-  const allServers = ref(null)
-  const allTariffs = ref(null)
-  const allUsers = ref(null)
-  const serverCookies = ref(null)
-  
-  // Состояние для фильтрации и пагинации пользователей
-  const usersFilters = ref({
-    tgID: '',
-    username: '',
-    tariff: '',
-    regMinDate: '',
-    regMaxDate: '',
-    subMinDate: '',
-    subMaxDate: '',
-    offset: 0,
-    limit: 50
-  })
-  
-  const usersPagination = ref({
-    currentPage: 1,
-    totalItems: 0,
-    itemsPerPage: 50
-  })
+	const userStats = ref(null)
+	const allServers = ref(null)
+	const allTariffs = ref(null)
+	const allUsers = ref(null)
+	const serverCookies = ref(null)
 
-  const isLoading = ref(false)
-  const error = ref(null)
-  
-  const { success, error: showError } = useToast()
+	// Состояние для фильтрации и пагинации пользователей
+	const usersFilters = ref({
+		tgID: '',
+		username: '',
+		tariff: '',
+		regMinDate: '',
+		regMaxDate: '',
+		subMinDate: '',
+		subMaxDate: '',
+		offset: 0,
+		limit: 1  // 1 пользователь на странице
+	})
 
-  const fetchUserStats = async () => {
-    isLoading.value = true
-    error.value = null
+	const usersPagination = ref({
+		currentPage: 1,
+		totalItems: 0,
+		itemsPerPage: 1  // 1 пользователь на странице
+	})
 
-    try {
-      const data = await getUserCount()
-      userStats.value = data
-    } catch (err) {
-      error.value = err
-      console.error('Failed to fetch user stats:', err)
-    } finally {
-      isLoading.value = false
-    }
-  }
+	const isLoading = ref(false)
+	const error = ref(null)
 
-  const fetchAllServers = async () => {
-    isLoading.value = true
-    error.value = null
+	const { success, error: showError } = useToast()
 
-    try {
-      const data = await getAllServers()
+	const fetchUserStats = async () => {
+		isLoading.value = true
+		error.value = null
 
-      allServers.value = data.сервера
-    } catch (err) {
-      error.value = err
-      console.error('Failed to fetch user stats:', err)
-    } finally {
-      isLoading.value = false
-    }
-  }
+		try {
+			const data = await getUserCount()
+			userStats.value = data
+		} catch (err) {
+			error.value = err
+			console.error('Failed to fetch user stats:', err)
+		} finally {
+			isLoading.value = false
+		}
+	}
 
-  const fetchAllTariffs = async () => {
-    isLoading.value = true
-    error.value = null
+	const fetchAllServers = async () => {
+		isLoading.value = true
+		error.value = null
 
-    try {
-      const data = await getAllTariffs()
+		try {
+			const data = await getAllServers()
 
-      allTariffs.value = data.тарифы
-    } catch (err) {
-      error.value = err
-      console.error('Failed to fetch user stats:', err)
-    } finally {
-      isLoading.value = false
-    }
-  }
+			allServers.value = data.сервера
+		} catch (err) {
+			error.value = err
+			console.error('Failed to fetch user stats:', err)
+		} finally {
+			isLoading.value = false
+		}
+	}
 
-  const fetchAllUsers = async (customFilters = {}) => {
-    isLoading.value = true
-    error.value = null
+	const fetchAllTariffs = async () => {
+		isLoading.value = true
+		error.value = null
 
-    try {
-      // Объединяем текущие фильтры с переданными
-      const filters = { ...usersFilters.value, ...customFilters }
-      
-      const data = await getAllUsers(filters)
+		try {
+			const data = await getAllTariffs()
 
-      allUsers.value = data.юзеры || []
-      
-      // Обновляем пагинацию
-      usersPagination.value.totalItems = data.total || allUsers.value.length
-      usersPagination.value.currentPage = Math.floor(filters.offset / filters.limit) + 1
-      
-    } catch (err) {
-      error.value = err
-      console.error('Failed to fetch users:', err)
-    } finally {
-      isLoading.value = false
-    }
-  }
+			allTariffs.value = data.тарифы
+		} catch (err) {
+			error.value = err
+			console.error('Failed to fetch user stats:', err)
+		} finally {
+			isLoading.value = false
+		}
+	}
 
-  const fetchServerCookies = async () => {
-    isLoading.value = true
-    error.value = null
+	const fetchAllUsers = async (customFilters = {}) => {
+		isLoading.value = true
+		error.value = null
 
-    try {
-      const data = await getServerCookies()
-      serverCookies.value = data
-      
-      // Показываем успешный тост
-      success(
-        'Cookies со всех серверов успешно обновлены',
-      )
-    } catch (err) {
-      error.value = err
-      console.error('Failed to fetch server cookies:', err)
-      
-      // Показываем тост с ошибкой
-      showError(
-        'Не удалось получить cookies с серверов',
-      )
-    } finally {
-      isLoading.value = false
-    }
-  }
+		try {
+			// Объединяем текущие фильтры с переданными
+			const filters = { ...usersFilters.value, ...customFilters }
 
-  const addServer = async (serverData) => {
-    isLoading.value = true
-    error.value = null
+			const data = await getAllUsers(filters)
 
-    try {
-      const data = await createServer(serverData)
-      
-      // Показываем успешный тост
-      success(
-        'Сервер создан',
-        'Новый сервер успешно добавлен',
-        { duration: 3000 }
-      )
-      
-      // Обновляем список серверов
-      await fetchAllServers()
-      
-      return data
-    } catch (err) {
-      error.value = err
-      console.error('Failed to create server:', err)
-      
-      // Показываем тост с ошибкой
-      showError(
-        'Ошибка создания сервера',
-        'Не удалось создать новый сервер',
-        { duration: 5000 }
-      )
-      
-      throw err
-    } finally {
-      isLoading.value = false
-    }
-  }
+			allUsers.value = data.юзеры || []
 
-  const addTariff = async (serverData) => {
-    isLoading.value = true
-    error.value = null
+			// Обновляем пагинацию
+			// Если API не возвращает total, делаем отдельный запрос для подсчета
+			if (data.total !== undefined) {
+				usersPagination.value.totalItems = data.total
+			} else {
+				// Если нет поля total, делаем запрос без пагинации для подсчета общего количества
+				const countData = await getAllUsers({ ...filters, offset: 0, limit: 1000 })
+				usersPagination.value.totalItems = countData.юзеры?.length || 0
+			}
+			usersPagination.value.currentPage = Math.floor(filters.offset / filters.limit) + 1
 
-    try {
-      const data = await createTariff(serverData)
-      
-      // Показываем успешный тост
-      success(
-        'Тариф создан',
-        'Новый тариф успешно добавлен',
-        { duration: 3000 }
-      )
-      
-      // Обновляем список серверов
-      await fetchAllTariffs()
-      
-      return data
-    } catch (err) {
-      error.value = err
-      console.error('Failed to create tariff:', err)
-      
-      // Показываем тост с ошибкой
-      showError(
-        'Ошибка создания тарифа',
-        'Не удалось создать новый тариф',
-        { duration: 5000 }
-      )
-      
-      throw err
-    } finally {
-      isLoading.value = false
-    }
-  }
+		} catch (err) {
+			error.value = err
+			console.error('Failed to fetch users:', err)
+		} finally {
+			isLoading.value = false
+		}
+	}
 
-  const editServer = async (serverId, serverData) => {
-    isLoading.value = true
-    error.value = null
+	const fetchServerCookies = async () => {
+		isLoading.value = true
+		error.value = null
 
-    try {
-      const data = await updateServer(serverId, serverData)
-      
-      // Показываем успешный тост
-      success(
-        'Сервер обновлен',
-        'Изменения сервера успешно сохранены',
-        { duration: 3000 }
-      )
-      
-      // Обновляем список серверов
-      await fetchAllServers()
-      
-      return data
-    } catch (err) {
-      error.value = err
-      console.error('Failed to update server:', err)
-      
-      // Показываем тост с ошибкой
-      showError(
-        'Ошибка обновления сервера',
-        'Не удалось сохранить изменения сервера',
-        { duration: 5000 }
-      )
-      
-      throw err
-    } finally {
-      isLoading.value = false
-    }
-  }
+		try {
+			const data = await getServerCookies()
+			serverCookies.value = data
 
-  // Методы для управления фильтрами пользователей
-  const updateUsersFilters = (newFilters) => {
-    usersFilters.value = { ...usersFilters.value, ...newFilters }
-  }
+			// Показываем успешный тост
+			success(
+				'Cookies со всех серверов успешно обновлены',
+			)
+		} catch (err) {
+			error.value = err
+			console.error('Failed to fetch server cookies:', err)
 
-  const resetUsersFilters = () => {
-    usersFilters.value = {
-      tgID: '',
-      username: '',
-      tariff: '',
-      regMinDate: '',
-      regMaxDate: '',
-      subMinDate: '',
-      subMaxDate: '',
-      offset: 0,
-      limit: 50
-    }
-  }
+			// Показываем тост с ошибкой
+			showError(
+				'Не удалось получить cookies с серверов',
+			)
+		} finally {
+			isLoading.value = false
+		}
+	}
 
-  const goToUsersPage = (page) => {
-    const offset = (page - 1) * usersFilters.value.limit
-    usersFilters.value.offset = offset
-    usersPagination.value.currentPage = page
-    fetchAllUsers()
-  }
+	const addServer = async (serverData) => {
+		isLoading.value = true
+		error.value = null
 
-  const changeUsersPageSize = (newSize) => {
-    usersFilters.value.limit = newSize
-    usersFilters.value.offset = 0
-    usersPagination.value.currentPage = 1
-    usersPagination.value.itemsPerPage = newSize
-    fetchAllUsers()
-  }
+		try {
+			const data = await createServer(serverData)
 
-  return {
-    userStats,
-    allServers,
-    allTariffs,
-    allUsers,
-    serverCookies,
-    usersFilters,
-    usersPagination,
-    isLoading,
-    error,
+			// Показываем успешный тост
+			success(
+				'Сервер создан',
+				'Новый сервер успешно добавлен',
+				{ duration: 3000 }
+			)
 
-    fetchUserStats,
-    fetchAllServers,
-    fetchAllTariffs,
-    fetchAllUsers,
-    fetchServerCookies,
-    addServer,
-    addTariff,
-    editServer,
-    
-    // Методы для работы с пользователями
-    updateUsersFilters,
-    resetUsersFilters,
-    goToUsersPage,
-    changeUsersPageSize,
-  }
+			// Обновляем список серверов
+			await fetchAllServers()
+
+			return data
+		} catch (err) {
+			error.value = err
+			console.error('Failed to create server:', err)
+
+			// Показываем тост с ошибкой
+			showError(
+				'Ошибка создания сервера',
+				'Не удалось создать новый сервер',
+				{ duration: 5000 }
+			)
+
+			throw err
+		} finally {
+			isLoading.value = false
+		}
+	}
+
+	const addTariff = async (serverData) => {
+		isLoading.value = true
+		error.value = null
+
+		try {
+			const data = await createTariff(serverData)
+
+			// Показываем успешный тост
+			success(
+				'Тариф создан',
+				'Новый тариф успешно добавлен',
+				{ duration: 3000 }
+			)
+
+			// Обновляем список серверов
+			await fetchAllTariffs()
+
+			return data
+		} catch (err) {
+			error.value = err
+			console.error('Failed to create tariff:', err)
+
+			// Показываем тост с ошибкой
+			showError(
+				'Ошибка создания тарифа',
+				'Не удалось создать новый тариф',
+				{ duration: 5000 }
+			)
+
+			throw err
+		} finally {
+			isLoading.value = false
+		}
+	}
+
+	const editServer = async (serverId, serverData) => {
+		isLoading.value = true
+		error.value = null
+
+		try {
+			const data = await updateServer(serverId, serverData)
+
+			// Показываем успешный тост
+			success(
+				'Сервер обновлен',
+				'Изменения сервера успешно сохранены',
+				{ duration: 3000 }
+			)
+
+			// Обновляем список серверов
+			await fetchAllServers()
+
+			return data
+		} catch (err) {
+			error.value = err
+			console.error('Failed to update server:', err)
+
+			// Показываем тост с ошибкой
+			showError(
+				'Ошибка обновления сервера',
+				'Не удалось сохранить изменения сервера',
+				{ duration: 5000 }
+			)
+
+			throw err
+		} finally {
+			isLoading.value = false
+		}
+	}
+
+	const updateUserSub = async (tgId, days) => {
+		isLoading.value = true
+		error.value = null
+
+		try {
+			const data = await apiUpdateUserSub(tgId, days)
+
+			// Показываем успешный тост
+			success(
+				'Время добавлено',
+				`Пользователю добавлено ${days} дней подписки`,
+				{ duration: 3000 }
+			)
+
+			// Обновляем список пользователей
+			await fetchAllUsers()
+
+			return data
+		} catch (err) {
+			error.value = err
+			console.error('Failed to update server:', err)
+
+			// Показываем тост с ошибкой
+			showError(
+				'Ошибка обновления сервера',
+				'Не удалось сохранить изменения сервера',
+				{ duration: 5000 }
+			)
+
+			throw err
+		} finally {
+			isLoading.value = false
+		}
+	}
+
+	const sendNewsletterMessage = async (filters, message, image = null) => {
+		isLoading.value = true
+		error.value = null
+
+		try {
+			const result = await sendNewsletter(filters, message, image)
+
+			// Показываем успешный тост
+			success(
+				'Рассылка отправлена',
+				'Сообщение успешно отправлено пользователям',
+				{ duration: 3000 }
+			)
+
+			return result
+		} catch (err) {
+			error.value = err
+			console.error('Failed to send newsletter:', err)
+
+			// Показываем тост с ошибкой
+			showError(
+				'Ошибка отправки рассылки',
+				'Не удалось отправить сообщение пользователям',
+				{ duration: 5000 }
+			)
+
+			throw err
+		} finally {
+			isLoading.value = false
+		}
+	}
+
+	// Методы для управления фильтрами пользователей
+	const updateUsersFilters = (newFilters) => {
+		usersFilters.value = { ...usersFilters.value, ...newFilters }
+	}
+
+	const resetUsersFilters = () => {
+		usersFilters.value = {
+			tgID: '',
+			username: '',
+			tariff: '',
+			regMinDate: '',
+			regMaxDate: '',
+			subMinDate: '',
+			subMaxDate: '',
+			offset: 0,
+			limit: 1  // 1 пользователь на странице
+		}
+	}
+
+	const goToUsersPage = (page) => {
+		const offset = (page - 1) * usersFilters.value.limit
+		usersFilters.value.offset = offset
+		usersPagination.value.currentPage = page
+		fetchAllUsers()
+	}
+
+	const changeUsersPageSize = (newSize) => {
+		usersFilters.value.limit = newSize
+		usersFilters.value.offset = 0
+		usersPagination.value.currentPage = 1
+		usersPagination.value.itemsPerPage = newSize
+		fetchAllUsers()
+	}
+
+	return {
+		userStats,
+		allServers,
+		allTariffs,
+		allUsers,
+		serverCookies,
+		usersFilters,
+		usersPagination,
+		isLoading,
+		error,
+
+		fetchUserStats,
+		fetchAllServers,
+		fetchAllTariffs,
+		fetchAllUsers,
+		fetchServerCookies,
+		addServer,
+		addTariff,
+		editServer,
+		updateUserSub,
+		sendNewsletterMessage,
+
+		// Методы для работы с пользователями
+		updateUsersFilters,
+		resetUsersFilters,
+		goToUsersPage,
+		changeUsersPageSize,
+	}
 })
