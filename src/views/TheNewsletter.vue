@@ -19,7 +19,7 @@
 					<textarea name="description" id="description" cols="30" rows="10" v-model="message"></textarea>
 				</div>
 				<div class="newsletter__buttons">
-					<button @click="sendNewsletter" class="newsletter__button" :disabled="usersStore.isLoading">
+					<button @click="sendNewsletter" class="newsletter__button" :disabled="disabledSendButton">
 						Отправить
 						<TheTelegram />
 					</button>
@@ -30,10 +30,11 @@
 				<TheSelect v-model="tarif" placeholder="Тариф" aria-label="Тариф" :options="tariffOptions" />
 				<TheSelect v-model="server" placeholder="Сервер" aria-label="Сервер" :options="serverOptions" />
 				<div class="servers__dialog-grid-item">
-					<input v-model="usersFilters.username" placeholder="Юзернейм" type="text" />
+					<input id="username" name="username" v-model="usersFilters.username" placeholder="Юзернейм"
+						type="text" />
 				</div>
 				<div class="servers__dialog-grid-item">
-					<input v-model="usersFilters.tgID" placeholder="TGid" type="number" />
+					<input id="tg-id" name="tg-id" v-model="usersFilters.tgID" placeholder="TGid" type="number" />
 				</div>
 				<div class="newsletter__pickers">
 					<TheDatePicker v-model="usersFilters.regMinDate" id="date-reg-min-date" label="Дата регистрации" />
@@ -48,20 +49,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import TheTelegram from '@/components/icons/TheTelegram.vue'
 import TheSelect from '@/components/ui/TheSelect.vue'
 import TheDatePicker from '@/components/ui/TheDatePicker.vue'
 import { useUsersStore } from '@/stores/index'
 
 const usersStore = useUsersStore()
-
-// Рефы для элементов
 const fileInput = ref(null)
 const selectedFile = ref(null)
-
-// Данные формы
 const message = ref('')
+const tarif = ref('')
+const server = ref('')
 const usersFilters = ref({
 	tgID: '',
 	username: '',
@@ -79,7 +78,10 @@ onMounted(async () => {
 	])
 })
 
-// Computed свойства для селектов
+const disabledSendButton = computed(() => {
+	return !message.value
+})
+
 const tariffOptions = computed(() => {
 	if (!usersStore.allTariffs || !Array.isArray(usersStore.allTariffs)) {
 		return []
@@ -101,7 +103,6 @@ const serverOptions = computed(() => {
 	}))
 })
 
-// Обработчик изменения файла
 const handleFileChange = (event) => {
 	const file = event.target.files[0]
 	if (file) {
@@ -111,16 +112,13 @@ const handleFileChange = (event) => {
 	}
 }
 
-// Отправка рассылки
 const sendNewsletter = async () => {
 	try {
-		// Проверяем, что есть сообщение
 		if (!message.value) {
 			alert('Введите текст сообщения')
 			return
 		}
 
-		// Очищаем фильтры от пустых значений
 		const cleanedFilters = {}
 		Object.keys(usersFilters.value).forEach(key => {
 			if (usersFilters.value[key] && usersFilters.value[key].toString().trim() !== '') {
@@ -128,7 +126,6 @@ const sendNewsletter = async () => {
 			}
 		})
 
-		// Добавляем выбранные тариф и сервер
 		if (tarif.value) {
 			cleanedFilters.tariff = tarif.value
 		}
@@ -136,10 +133,8 @@ const sendNewsletter = async () => {
 			cleanedFilters.server = server.value
 		}
 
-		// Отправляем рассылку
 		await usersStore.sendNewsletterMessage(cleanedFilters, message.value, selectedFile.value)
 
-		// Очищаем форму после успешной отправки
 		message.value = ''
 		selectedFile.value = null
 		tarif.value = ''
@@ -151,9 +146,6 @@ const sendNewsletter = async () => {
 		console.error('Ошибка отправки рассылки:', error)
 	}
 }
-
-const tarif = ref('')
-const server = ref('')
 </script>
 
 <style lang="scss">
@@ -256,6 +248,12 @@ const server = ref('')
 		font-weight: 500;
 		background-color: hsl(0 0% 98%);
 		color: hsl(240 5.9% 10%);
+
+		&:disabled {
+			pointer-events: none;
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
 
 		svg {
 			width: 16px;

@@ -1,7 +1,8 @@
 <template>
     <div class="date-picker-wrapper">
         <label v-if="label" class="date-picker-label" :for="id">{{ label }}</label>
-        <DatePickerRoot :id="id" :is-date-unavailable="isDateUnavailable" :locale="'ru'">
+        <DatePickerRoot :id="id" :is-date-unavailable="isDateUnavailable" :locale="'ru'"
+            @update:model-value="handleDateChange">
             <DatePickerField v-slot="{ segments }" class="date-picker-field">
                 <div class="date-picker-input">
                     <template v-for="item in segments" :key="item.part">
@@ -74,8 +75,40 @@ const props = defineProps({
     isDateUnavailable: {
         type: Function,
         default: () => false
+    },
+    modelValue: {
+        type: String,
+        default: ''
     }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
+// Функция для форматирования даты в YYYY-MM-DD
+const formatDate = (date) => {
+    if (!date) return ''
+
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+}
+
+// Обработчик изменения даты
+const handleDateChange = (date) => {
+    let formattedDate = ''
+
+    if (date && typeof date.toString === 'function') {
+        // Преобразуем в строку и затем в Date
+        const dateString = date.toString()
+        const parsedDate = new Date(dateString)
+        if (!isNaN(parsedDate.getTime())) {
+            formattedDate = formatDate(parsedDate)
+        }
+    }
+
+    emit('update:modelValue', formattedDate)
+}
 </script>
 
 <style lang="scss">
