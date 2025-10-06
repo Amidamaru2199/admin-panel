@@ -120,7 +120,6 @@ export const useUsersStore = defineStore('users', () => {
 			const data = await getServerCookies()
 			serverCookies.value = data
 
-			// Показываем успешный тост
 			success(
 				'Cookies со всех серверов успешно обновлены',
 			)
@@ -128,9 +127,9 @@ export const useUsersStore = defineStore('users', () => {
 			error.value = err
 			console.error('Failed to fetch server cookies:', err)
 
-			// Показываем тост с ошибкой
 			showError(
 				'Не удалось получить cookies с серверов',
+				err,
 			)
 		} finally {
 			isLoading.value = false
@@ -144,14 +143,11 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			const data = await createServer(serverData)
 
-			// Показываем успешный тост
 			success(
 				'Сервер создан',
 				'Новый сервер успешно добавлен',
-				{ duration: 3000 }
 			)
 
-			// Обновляем список серверов
 			await fetchAllServers()
 
 			return data
@@ -159,11 +155,9 @@ export const useUsersStore = defineStore('users', () => {
 			error.value = err
 			console.error('Failed to create server:', err)
 
-			// Показываем тост с ошибкой
 			showError(
 				'Ошибка создания сервера',
-				'Не удалось создать новый сервер',
-				{ duration: 5000 }
+				err,
 			)
 
 			throw err
@@ -179,14 +173,12 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			const data = await createTariff(serverData)
 
-			// Показываем успешный тост
 			success(
-				'Тариф создан',
 				'Новый тариф успешно добавлен',
+				'Тариф добавлен в систему',
 				{ duration: 3000 }
 			)
 
-			// Обновляем список серверов
 			await fetchAllTariffs()
 
 			return data
@@ -194,11 +186,8 @@ export const useUsersStore = defineStore('users', () => {
 			error.value = err
 			console.error('Failed to create tariff:', err)
 
-			// Показываем тост с ошибкой
 			showError(
-				'Ошибка создания тарифа',
 				'Не удалось создать новый тариф',
-				{ duration: 5000 }
 			)
 
 			throw err
@@ -214,14 +203,10 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			const data = await updateServer(serverId, serverData)
 
-			// Показываем успешный тост
 			success(
-				'Сервер обновлен',
-				'Изменения сервера успешно сохранены',
-				{ duration: 3000 }
+				'Сервер успешно обновлен',
 			)
 
-			// Обновляем список серверов
 			await fetchAllServers()
 
 			return data
@@ -229,11 +214,9 @@ export const useUsersStore = defineStore('users', () => {
 			error.value = err
 			console.error('Failed to update server:', err)
 
-			// Показываем тост с ошибкой
 			showError(
-				'Ошибка обновления сервера',
 				'Не удалось сохранить изменения сервера',
-				{ duration: 5000 }
+				err
 			)
 
 			throw err
@@ -249,14 +232,10 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			const data = await apiUpdateUserSub(tgId, days)
 
-			// Показываем успешный тост
 			success(
-				'Время добавлено',
 				`Пользователю добавлено ${days} дней подписки`,
-				{ duration: 3000 }
 			)
 
-			// Обновляем список пользователей
 			await fetchAllUsers()
 
 			return data
@@ -264,11 +243,9 @@ export const useUsersStore = defineStore('users', () => {
 			error.value = err
 			console.error('Failed to update server:', err)
 
-			// Показываем тост с ошибкой
 			showError(
-				'Ошибка обновления сервера',
 				'Не удалось сохранить изменения сервера',
-				{ duration: 5000 }
+				err
 			)
 
 			throw err
@@ -284,11 +261,8 @@ export const useUsersStore = defineStore('users', () => {
 		try {
 			const result = await sendNewsletter(filters, message, image)
 
-			// Показываем успешный тост
 			success(
-				'Рассылка отправлена',
 				'Сообщение успешно отправлено пользователям',
-				{ duration: 3000 }
 			)
 
 			return result
@@ -296,11 +270,9 @@ export const useUsersStore = defineStore('users', () => {
 			error.value = err
 			console.error('Failed to send newsletter:', err)
 
-			// Показываем тост с ошибкой
 			showError(
-				'Ошибка отправки рассылки',
 				'Не удалось отправить сообщение пользователям',
-				{ duration: 5000 }
+				err
 			)
 
 			throw err
@@ -365,7 +337,6 @@ export const useUsersStore = defineStore('users', () => {
 		updateUserSub,
 		sendNewsletterMessage,
 
-		// Методы для работы с пользователями
 		updateUsersFilters,
 		resetUsersFilters,
 		goToUsersPage,

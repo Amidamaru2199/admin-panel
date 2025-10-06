@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <TheHeader />
-  </div>
-  <main>
-    <RouterView />
-  </main>
-  <ToastContainer />
+	<div>
+		<TheHeader />
+	</div>
+	<main>
+		<RouterView />
+	</main>
+	<ToastContainer />
 </template>
 
 <script setup>
