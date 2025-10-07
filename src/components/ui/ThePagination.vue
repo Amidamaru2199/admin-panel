@@ -132,12 +132,12 @@ const goToLastPage = () => {
     min-width: 32px;
     height: 32px;
     padding: 0 8px;
-    border: 1px solid hsl(240 3.7% 25%);
+    border: 1px solid $secondary-color;
     border-radius: 6px;
     background-color: transparent;
     font-size: 14px;
     font-weight: 500;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
     cursor: pointer;
     transition: all 0.2s ease;
     outline: none;
@@ -148,7 +148,7 @@ const goToLastPage = () => {
     }
 
     &:focus {
-        box-shadow: 0 0 0 2px hsl(0 0% 98%);
+        box-shadow: 0 0 0 2px $primary-color;
     }
 
     &:disabled {

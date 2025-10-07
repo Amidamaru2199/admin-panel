@@ -173,7 +173,7 @@ const formatDate = (dateString) => {
 	}
 
 	&__status-active {
-		color: hsl(142 76% 36%);
+		color: $success-color;
 		font-weight: 500;
 	}
 
@@ -185,7 +185,7 @@ const formatDate = (dateString) => {
 	&__dropdown-trigger {
 		background: none;
 		border: none;
-		color: hsl(0 0% 98%);
+		color: $primary-color;
 		cursor: pointer;
 		padding: 4px 8px;
 		border-radius: 4px;
@@ -199,7 +199,7 @@ const formatDate = (dateString) => {
 		min-width: 120px;
 		padding: 4px;
 		background-color: hsl(240 10% 3.9%);
-		border: 1px solid hsl(240 3.7% 25%);
+		border: 1px solid $secondary-color;
 		border-radius: 8px;
 		z-index: 50;
 
@@ -216,7 +216,7 @@ const formatDate = (dateString) => {
 		border-radius: 4px;
 		cursor: pointer;
 		font-size: 14px;
-		color: hsl(0 0% 98%);
+		color: $primary-color;
 
 		&:hover {
 			background-color: hsl(240deg 3.7% 25%);

@@ -8,20 +8,27 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(), 
-    vueJsx(), 
-    vueDevTools(),
-    Components({
-      dts: true,
-      resolvers: [
-        RadixVueResolver()
-      ],
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
+	plugins: [
+		vue(),
+		vueJsx(),
+		vueDevTools(),
+		Components({
+			dts: true,
+			resolvers: [
+				RadixVueResolver()
+			],
+		}),
+	],
+	resolve: {
+		alias: {
+			'@': fileURLToPath(new URL('./src', import.meta.url)),
+		},
+	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: `@import "@/assets/constants.scss";`
+			}
+		}
+	}
 })

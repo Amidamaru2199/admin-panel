@@ -41,8 +41,8 @@ watch(switchState, (newValue) => {
 	transition: all 0.2s ease;
 
 	&[data-state='checked'] {
-		background-color: hsl(0 0% 98%);
-		border-color: hsl(0 0% 98%);
+		background-color: $primary-color;
+		border-color: $primary-color;
 	}
 }
 

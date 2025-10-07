@@ -65,11 +65,11 @@ defineProps({
 	overflow: hidden;
 
 	&--success {
-		border-color: hsl(142 76% 36%);
+		border-color: $success-color;
 		background-color: hsl(142 76% 36% / 10%);
 
 		.toast__title {
-			color: hsl(142 76% 36%);
+			color: $success-color;
 		}
 	}
 
@@ -104,7 +104,7 @@ defineProps({
 .toast__title {
 	font-size: 14px;
 	font-weight: 600;
-	color: hsl(0 0% 98%);
+	color: $primary-color;
 	margin: 0;
 	flex: 1;
 }
@@ -154,7 +154,7 @@ defineProps({
 
 	&:hover {
 		background-color: hsl(240deg 3.7% 15.9% / 50%);
-		color: hsl(0 0% 98%);
+		color: $primary-color;
 	}
 
 	svg {

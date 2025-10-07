@@ -328,7 +328,7 @@ const resetForm = () => {
         font-size: 14px;
         line-height: 1;
         font-weight: 500;
-        color: hsl(0 0% 98%);
+        color: $primary-color;
     }
 
     span {
@@ -336,7 +336,7 @@ const resetForm = () => {
     }
 
     .required {
-        color: hsl(0 62.8% 30.6%);
+        color: $error-color;
         font-weight: 600;
     }
 
@@ -350,10 +350,10 @@ const resetForm = () => {
         font-size: 14px;
         line-height: 1;
         font-weight: 500;
-        color: hsl(0 0% 98%);
+        color: $primary-color;
 
         &:focus {
-            border: 1px solid hsl(0 0% 98%);
+            border: 1px solid $primary-color;
         }
     }
 }
@@ -363,7 +363,7 @@ const resetForm = () => {
     padding-inline: 16px;
     border-radius: 6px;
     color: hsl(240 5.9% 10%);
-    background-color: hsl(0 0% 98%);
+    background-color: $primary-color;
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;

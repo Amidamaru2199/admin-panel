@@ -123,7 +123,7 @@ const switchState = ref(false)
         font-size: 14px;
         line-height: 1;
         font-weight: 500;
-        color: hsl(0 0% 98%);
+        color: $primary-color;
         text-align: right;
     }
 
@@ -142,10 +142,10 @@ const switchState = ref(false)
         font-size: 14px;
         line-height: 1;
         font-weight: 500;
-        color: hsl(0 0% 98%);
+        color: $primary-color;
 
         &:focus {
-            border: 1px solid hsl(0 0% 98%);
+            border: 1px solid $primary-color;
         }
     }
 }
@@ -154,8 +154,8 @@ const switchState = ref(false)
     height: 40px;
     padding-inline: 16px;
     border-radius: 6px;
-    color: hsl(240 5.9% 10%);
-    background-color: hsl(0 0% 98%);
+    color: $background-color;
+    background-color: $primary-color;
 
     &:hover {
         background-color: hsl(240 5% 64.9%);

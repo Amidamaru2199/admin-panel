@@ -121,7 +121,7 @@ const handleDateChange = (date) => {
 .date-picker-label {
     font-size: 14px;
     font-weight: 500;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
     margin-bottom: 0;
 }
 
@@ -131,12 +131,12 @@ const handleDateChange = (date) => {
     justify-content: space-between;
     height: 40px;
     padding: 0 12px;
-    border: 1px solid hsl(240 3.7% 25%);
+    border: 1px solid $secondary-color;
     border-radius: 6px;
     background-color: transparent;
     font-size: 14px;
     font-weight: 500;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
     cursor: pointer;
     transition: border-color 0.2s ease;
 
@@ -145,11 +145,11 @@ const handleDateChange = (date) => {
     }
 
     &:focus-within {
-        border-color: hsl(0 0% 98%);
+        border-color: $primary-color;
     }
 
     &[data-invalid] {
-        border-color: hsl(0 62.8% 30.6%);
+        border-color: $error-color;
     }
 }
 
@@ -164,13 +164,13 @@ const handleDateChange = (date) => {
     border-radius: 4px;
     outline: none;
     background-color: transparent;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
     font-size: 14px;
     font-weight: 500;
 
     &:focus {
         background-color: hsl(240deg 3.7% 15.9% / 50%);
-        box-shadow: 0 0 0 2px hsl(0 0% 98%);
+        box-shadow: 0 0 0 2px $primary-color;
     }
 
     &[data-placeholder] {
@@ -192,11 +192,11 @@ const handleDateChange = (date) => {
 
     &:hover {
         background-color: hsl(240deg 3.7% 15.9% / 50%);
-        color: hsl(0 0% 98%);
+        color: $primary-color;
     }
 
     &:focus {
-        box-shadow: 0 0 0 2px hsl(0 0% 98%);
+        box-shadow: 0 0 0 2px $primary-color;
     }
 
     svg {
@@ -208,7 +208,7 @@ const handleDateChange = (date) => {
 
 .date-picker-content {
     background-color: hsl(240 10% 3.9%);
-    border: 1px solid hsl(240 3.7% 25%);
+    border: 1px solid $secondary-color;
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     z-index: 50;
@@ -244,11 +244,11 @@ const handleDateChange = (date) => {
 
     &:hover {
         background-color: hsl(240deg 3.7% 15.9% / 50%);
-        color: hsl(0 0% 98%);
+        color: $primary-color;
     }
 
     &:focus {
-        box-shadow: 0 0 0 2px hsl(0 0% 98%);
+        box-shadow: 0 0 0 2px $primary-color;
     }
 
     svg {
@@ -264,7 +264,7 @@ const handleDateChange = (date) => {
 .date-picker-heading {
     font-size: 16px;
     font-weight: 600;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
 }
 
 .date-picker-grid-container {
@@ -315,7 +315,7 @@ const handleDateChange = (date) => {
     background-color: transparent;
     font-size: 14px;
     font-weight: 500;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
     cursor: pointer;
     transition: all 0.2s ease;
     outline: none;
@@ -326,11 +326,11 @@ const handleDateChange = (date) => {
     }
 
     &:focus {
-        box-shadow: 0 0 0 2px hsl(0 0% 98%);
+        box-shadow: 0 0 0 2px $primary-color;
     }
 
     &[data-selected] {
-        background-color: hsl(0 0% 98%);
+        background-color: $primary-color;
         color: hsl(240 5.9% 10%);
         font-weight: 600;
     }
@@ -346,7 +346,7 @@ const handleDateChange = (date) => {
             width: 4px;
             height: 4px;
             border-radius: 50%;
-            background-color: hsl(0 0% 98%);
+            background-color: $primary-color;
         }
     }
 

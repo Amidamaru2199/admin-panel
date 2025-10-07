@@ -117,12 +117,12 @@ watch(
     min-width: 160px;
     height: 40px;
     padding: 0 12px;
-    border: 1px solid hsl(240 3.7% 25%);
+    border: 1px solid $secondary-color;
     border-radius: 6px;
     background-color: transparent;
     font-size: 14px;
     font-weight: 500;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
     cursor: pointer;
     outline: none;
     transition: border-color 0.2s ease;
@@ -132,7 +132,7 @@ watch(
     }
 
     &:focus {
-        border-color: hsl(0 0% 98%);
+        border-color: $primary-color;
     }
 
     &[data-placeholder] {
@@ -160,7 +160,7 @@ watch(
 .select-content {
     min-width: 160px;
     background-color: hsl(240 10% 3.9%);
-    border: 1px solid hsl(240 3.7% 25%);
+    border: 1px solid $secondary-color;
     border-radius: 6px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     z-index: 50;
@@ -203,7 +203,7 @@ watch(
     padding: 0 12px 0 32px;
     font-size: 14px;
     font-weight: 500;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
     cursor: pointer;
     border-radius: 4px;
     position: relative;
@@ -232,7 +232,7 @@ watch(
     display: flex;
     align-items: center;
     justify-content: center;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
 }
 
 /* Анимации */

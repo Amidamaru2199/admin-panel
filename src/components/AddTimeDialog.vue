@@ -30,10 +30,10 @@ import TheDialog from '@/components/ui/TheDialog.vue'
 import { useUsersStore } from '@/stores/index'
 
 const props = defineProps({
-  tgId: {
-    type: Number,
-    required: true
-  }
+	tgId: {
+		type: Number,
+		required: true
+	}
 })
 
 const days = ref(0)
@@ -42,15 +42,15 @@ const dialogRef = ref(null)
 const usersStore = useUsersStore()
 
 const addTime = async () => {
-  try {
-    await usersStore.updateUserSub(props.tgId, days.value)
-    // Закрываем диалог после успешного обновления
-    if (dialogRef.value) {
-      dialogRef.value.isOpen = false
-    }
-  } catch (error) {
-    console.error('Error adding time:', error)
-  }
+	try {
+		await usersStore.updateUserSub(props.tgId, days.value)
+		// Закрываем диалог после успешного обновления
+		if (dialogRef.value) {
+			dialogRef.value.isOpen = false
+		}
+	} catch (error) {
+		console.error('Error adding time:', error)
+	}
 }
 </script>
 
@@ -93,10 +93,10 @@ const addTime = async () => {
 		font-size: 14px;
 		line-height: 1;
 		font-weight: 500;
-		color: hsl(0 0% 98%);
+		color: $primary-color;
 
 		&:focus {
-			border: 1px solid hsl(0 0% 98%);
+			border: 1px solid $primary-color;
 		}
 	}
 }
@@ -105,8 +105,8 @@ const addTime = async () => {
 	height: 40px;
 	padding-inline: 16px;
 	border-radius: 6px;
-	color: hsl(240 5.9% 10%);
-	background-color: hsl(0 0% 98%);
+	color: $background-color;
+	background-color: $primary-color;
 
 	&:hover {
 		background-color: hsl(240 5% 64.9%);

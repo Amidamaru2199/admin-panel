@@ -70,14 +70,14 @@ onMounted(async () => {
 		margin-bottom: 12px;
 		font-size: 14px;
 		font-weight: 500;
-		color: hsl(0 0% 98%);
+		color: $primary-color;
 	}
 
 	&__top-containar-count {
 		margin-bottom: 4px;
 		font-size: 24px;
 		font-weight: 700;
-		color: hsl(0 0% 98%);
+		color: $primary-color;
 	}
 
 	&__top-containar-summ {

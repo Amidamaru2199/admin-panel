@@ -181,7 +181,7 @@ const sendNewsletter = async () => {
 			font-size: 14px;
 			line-height: 1;
 			font-weight: 500;
-			color: hsl(0 0% 98%);
+			color: $primary-color;
 		}
 
 		span {
@@ -199,10 +199,10 @@ const sendNewsletter = async () => {
 			font-size: 14px;
 			line-height: 1;
 			font-weight: 500;
-			color: hsl(0 0% 98%);
+			color: $primary-color;
 
 			&:focus {
-				border: 1px solid hsl(0 0% 98%);
+				border: 1px solid $primary-color;
 			}
 		}
 
@@ -226,8 +226,8 @@ const sendNewsletter = async () => {
 		border-radius: 6px;
 		font-size: 14px;
 		font-weight: 500;
-		background-color: hsl(0 0% 98%);
-		color: hsl(240 5.9% 10%);
+		background-color: $primary-color;
+		color: $background-color;
 
 		&:disabled {
 			pointer-events: none;
@@ -236,7 +236,7 @@ const sendNewsletter = async () => {
 		}
 
 		&:hover {
-			background-color: hsl(0 0% 98%);
+			background-color: $primary-color;
 			opacity: 0.8;
 		}
 

@@ -105,7 +105,7 @@ onMounted(async () => {
 		min-width: 120px;
 		padding: 4px;
 		background-color: hsl(240 10% 3.9%);
-		border: 1px solid hsl(240 3.7% 25%);
+		border: 1px solid $secondary-color;
 		border-radius: 8px;
 		z-index: 50;
 
@@ -122,7 +122,7 @@ onMounted(async () => {
 		border-radius: 4px;
 		cursor: pointer;
 		font-size: 14px;
-		color: hsl(0 0% 98%);
+		color: $primary-color;
 
 		&:hover {
 			background-color: hsl(240deg 3.7% 25%);

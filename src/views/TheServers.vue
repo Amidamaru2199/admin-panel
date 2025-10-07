@@ -150,7 +150,7 @@ onMounted(async () => {
 
 	&__code {
 		font-size: 12px;
-		color: hsl(0 0% 64.9%);
+		color: $text-muted;
 		font-weight: 400;
 	}
 }

@@ -68,7 +68,7 @@ defineExpose({
     font-size: 18px;
     line-height: 1;
     font-weight: 600;
-    color: hsl(0 0% 98%);
+    color: $primary-color;
 }
 
 .dialog-description {
@@ -97,7 +97,7 @@ defineExpose({
     color: hsl(240 5% 64.9%);
 
     &:hover {
-        color: hsl(0 0% 98%);
+        color: $primary-color;
     }
 
     svg {

@@ -1,10 +1,6 @@
 <template>
 	<div class="header">
 		<nav class="header__navigation">
-			<RouterLink class="header__logo-wr" to="/">
-				<TheLogo />
-				<span>AdronVPN</span>
-			</RouterLink>
 			<RouterLink to="/dashboard">Дашборд</RouterLink>
 			<RouterLink to="/servers">Сервера</RouterLink>
 			<RouterLink to="/tariffs">Тарифы</RouterLink>
@@ -31,7 +27,6 @@
 
 <script setup>
 import TheAccount from './icons/TheAccount.vue'
-import TheLogo from './icons/TheLogo.vue'
 </script>
 
 <style lang="scss">
@@ -49,17 +44,6 @@ import TheLogo from './icons/TheLogo.vue'
 
 		a {
 			font-size: 14px;
-		}
-	}
-
-	&__logo-wr {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-
-		span {
-			font-size: 16px;
-			color: hsl(0 0% 98%);
 		}
 	}
 
@@ -88,7 +72,7 @@ import TheLogo from './icons/TheLogo.vue'
 		min-width: 120px;
 		padding: 4px;
 		background-color: hsl(240 10% 3.9%);
-		border: 1px solid hsl(240 3.7% 25%);
+		border: 1px solid $secondary-color;
 		border-radius: 8px;
 		z-index: 50;
 
@@ -105,7 +89,7 @@ import TheLogo from './icons/TheLogo.vue'
 		border-radius: 4px;
 		cursor: pointer;
 		font-size: 14px;
-		color: hsl(0 0% 98%);
+		color: $primary-color;
 
 		&:hover {
 			background-color: hsl(240deg 3.7% 25%);
