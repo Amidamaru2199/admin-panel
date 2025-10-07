@@ -22,13 +22,13 @@ export const useUsersStore = defineStore('users', () => {
 		subMinDate: '',
 		subMaxDate: '',
 		offset: 0,
-		limit: 1  // 1 пользователь на странице
+		limit: 20  // 1 пользователь на странице
 	})
 
 	const usersPagination = ref({
 		currentPage: 1,
 		totalItems: 0,
-		itemsPerPage: 1  // 1 пользователь на странице
+		itemsPerPage: 20  // 1 пользователь на странице
 	})
 
 	const isLoading = ref(false)
