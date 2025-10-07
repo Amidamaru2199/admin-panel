@@ -8,7 +8,8 @@
 
 			<FilterDialog>
 				<template #trigger>
-					<div class="block__header-button block__dialog-trigger">Фильтр</div>
+					<div class="block__header-button block__dialog-trigger"><span
+							v-if="usersStore.isUsersFilters" />Фильтр</div>
 				</template>
 			</FilterDialog>
 
@@ -64,7 +65,7 @@
 								{{ user.is_active ? 'Активный' : 'Неактивный' }}
 							</span>
 						</td>
-						<td>{{ user.tariff_id }}</td>
+						<td>{{ user.tariff_name }}</td>
 						<td>{{ user.server_id }}</td>
 						<td>{{ formatDate(user.subscription) }}</td>
 						<td>{{ formatDate(user.registered_at) }}</td>
@@ -146,8 +147,16 @@ const formatDate = (dateString) => {
 
 <style lang="scss">
 .users {
-	&__dialog-trigger {
+	.block__dialog-trigger {
 		cursor: pointer;
+
+		span {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background-color: rgb(37 99 235);
+		}
 	}
 
 	&__loading,
@@ -211,16 +220,17 @@ const formatDate = (dateString) => {
 
 		&:hover {
 			background-color: hsl(240deg 3.7% 25%);
-		}}
+		}
+	}
 
-  tr {
-    th:first-of-type {
-      width: 1%;
-    }
+	tr {
+		th:first-of-type {
+			width: 1%;
+		}
 
-    td:first-of-type {
-      width: 1%;
-    }
-  }
+		td:first-of-type {
+			width: 1%;
+		}
+	}
 }
 </style>

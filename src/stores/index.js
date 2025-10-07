@@ -9,11 +9,13 @@ export const useUsersStore = defineStore('users', () => {
 	const allTariffs = ref(null)
 	const allUsers = ref(null)
 	const serverCookies = ref(null)
+	const isUsersFilters = ref(false)
 
 	// Состояние для фильтрации и пагинации пользователей
 	const usersFilters = ref({
 		tgID: '',
 		username: '',
+		fullname: '',
 		tariff: '',
 		regMinDate: '',
 		regMaxDate: '',
@@ -290,6 +292,7 @@ export const useUsersStore = defineStore('users', () => {
 		usersFilters.value = {
 			tgID: '',
 			username: '',
+			fullname: '',
 			tariff: '',
 			regMinDate: '',
 			regMaxDate: '',
@@ -321,6 +324,7 @@ export const useUsersStore = defineStore('users', () => {
 		allTariffs,
 		allUsers,
 		serverCookies,
+		isUsersFilters,
 		usersFilters,
 		usersPagination,
 		isLoading,

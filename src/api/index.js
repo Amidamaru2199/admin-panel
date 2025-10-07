@@ -74,6 +74,7 @@ export const getAllUsers = async (filters = {}) => {
 		// Добавляем параметры фильтрации
 		if (filters.tgID) queryParams.append('tgID', filters.tgID)
 		if (filters.username) queryParams.append('username', filters.username)
+		if (filters.fullname) queryParams.append('fullname', filters.fullname)
 		if (filters.tariff) queryParams.append('tariff', filters.tariff)
 		if (filters.regMinDate) queryParams.append('regMinDate', filters.regMinDate)
 		if (filters.regMaxDate) queryParams.append('regMaxDate', filters.regMaxDate)

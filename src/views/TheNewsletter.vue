@@ -113,16 +113,12 @@ const sendNewsletter = async () => {
 		if (tarif.value) {
 			cleanedFilters.tariff = tarif.value
 		}
-		if (server.value) {
-			cleanedFilters.server = server.value
-		}
 
 		await usersStore.sendNewsletterMessage(cleanedFilters, message.value, selectedFile.value)
 
 		message.value = ''
 		selectedFile.value = null
 		tarif.value = ''
-		server.value = ''
 		if (fileInput.value) {
 			fileInput.value.value = ''
 		}

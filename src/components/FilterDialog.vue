@@ -9,25 +9,24 @@
 		<template #description>Выбери каких пользователей показать</template>
 
 		<template #body>
-			<TheSelect v-model="tarif" placeholder="Тариф" aria-label="Тариф" :options="tarifOptions" />
-			<TheSelect v-model="server" placeholder="Сервер" aria-label="Сервер" :options="serverOptions" />
+			<TheSelect v-model="usersFilters.tariff" placeholder="Тариф" aria-label="Тариф" :options="tariffOptions" />
 
 			<div class="servers__dialog-grid">
 				<div class="servers__dialog-group">
 					<div class="servers__dialog-grid-item">
-						<input v-model="usersFilters.username" placeholder="Имя" type="text" />
+						<input id="name" name="name" v-model="usersFilters.fullname" placeholder="Имя" type="text" />
 					</div>
 					<div class="servers__dialog-grid-item">
-						<input v-model="usersFilters.tgID" placeholder="TGid" type="text" />
+						<input id="tgID" name="tgID" v-model="usersFilters.tgID" placeholder="TGid" type="text" />
 					</div>
-					<TheDatePicker id="date-start-field" label="Дата регистрации"
-						:is-date-unavailable="(date) => date.day === 19" v-model="usersFilters.regMinDate" />
-					<TheDatePicker id="date-end-field" label="Дата окончания подписки"
-						:is-date-unavailable="(date) => date.day === 19" />
+					<TheDatePicker v-model="usersFilters.regMinDate" id="date-reg-min-date" label="Дата регистрации" />
+					<TheDatePicker v-model="usersFilters.subMinDate" id="date-sub-min-date"
+						label="Дата окончания подписки" />
 				</div>
 				<div class="servers__dialog-group">
 					<div class="servers__dialog-grid-item">
-						<input v-model="usersFilters.username" placeholder="Юзернейм" type="text" />
+						<input id="username" name="username" v-model="usersFilters.username" placeholder="Юзернейм"
+							type="text" />
 					</div>
 					<NumberFieldRoot class="servers__dialog-grid-item">
 						<NumberFieldDecrement class="servers__dialog-decrement">
@@ -38,33 +37,33 @@
 							<ThePlus />
 						</NumberFieldIncrement>
 					</NumberFieldRoot>
-					<TheDatePicker id="date-start-field" label="&nbsp;"
-						:is-date-unavailable="(date) => date.day === 19" />
-					<TheDatePicker v-model="usersFilters.subMaxDate" id="date-end-field" label="&nbsp;"
-						:is-date-unavailable="(date) => date.day === 19" />
+					<TheDatePicker v-model="usersFilters.regMaxDate" id="date-reg-max-date" label="&nbsp;" />
+					<TheDatePicker v-model="usersFilters.subMaxDate" id="date-sub-max-date" label="&nbsp;" />
 				</div>
 			</div>
 		</template>
 
 		<template #footer>
-			<button class="filter__dialog-save-button">Сбросить фильтры</button>
+			<button v-if="usersStore.isUsersFilters" @click="resetForm" class="filter__dialog-save-button">Сбросить
+				фильтры</button>
 			<button @click="filterUsers" class="filter__dialog-save-button">Фильтровать</button>
 		</template>
 	</TheDialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import TheDialog from '@/components/ui/TheDialog.vue'
 import TheSelect from '@/components/ui/TheSelect.vue'
 import TheDatePicker from '@/components/ui/TheDatePicker.vue'
 import { useUsersStore } from '@/stores/index'
 
 const usersStore = useUsersStore()
-
+const dialogRef = ref(null)
 const usersFilters = ref({
 	tgID: '',
 	username: '',
+	fullname: '',
 	tariff: '',
 	regMinDate: '',
 	regMaxDate: '',
@@ -72,34 +71,52 @@ const usersFilters = ref({
 	subMaxDate: '',
 })
 
+const tariffOptions = computed(() => {
+	if (!usersStore.allTariffs || !Array.isArray(usersStore.allTariffs)) {
+		return []
+	}
+	return usersStore.allTariffs.map(tariff => ({
+		label: tariff.name,
+		value: tariff.id
+	}))
+})
+
 const filterUsers = async () => {
 	try {
 		await usersStore.fetchAllUsers(usersFilters.value)
-		// Закрываем диалог после успешного обновления
+
 		if (dialogRef.value) {
 			dialogRef.value.isOpen = false
 		}
 	} catch (error) {
-		console.error('Error adding time:', error)
+		console.error('Error filtering users:', error)
 	}
 }
 
-const tarif = ref('')
-const server = ref('')
+const resetForm = () => {
+	usersFilters.value = {
+		tgID: '',
+		username: '',
+		fullname: '',
+		tariff: '',
+		regMinDate: '',
+		regMaxDate: '',
+		subMinDate: '',
+		subMaxDate: '',
+	}
+}
 
-const tarifOptions = ['На 1 месяц', 'На 2 месяца', 'На 3 месяца']
-const serverOptions = [
-	'Алматы',
-	'Москва',
-	'Лондон',
-	'Нью-Йорк',
-	'Токио',
-	'Париж',
-	'Берлин',
-	'Сидней',
-	'Дубай',
-	'Сингапур',
-]
+watch(usersFilters, () => {
+	if (usersFilters.value.tgID || usersFilters.value.username || usersFilters.value.fullname || usersFilters.value.tariff || usersFilters.value.regMinDate || usersFilters.value.regMaxDate || usersFilters.value.subMinDate || usersFilters.value.subMaxDate) {
+		usersStore.isUsersFilters = true
+	} else {
+		usersStore.isUsersFilters = false
+	}
+}, { deep: true })
+
+onMounted(async () => {
+	usersStore.fetchAllTariffs()
+})
 </script>
 
 <style lang="scss">
